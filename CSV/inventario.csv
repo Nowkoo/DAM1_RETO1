@@ -1,0 +1,13 @@
+idDispositivo,nombreDispositivo,sala,IP
+1,Router-Firewall,Biblioteca,192.168.1.1
+2,Switch Sala Ordenadores,Sala Ordenadores,192.168.2.1/24
+3,Servidor0,Sala Ordenadores,
+4,Switch Administracion,Administracion,192.168.1.2/24
+20,PC0,Sala Ordenadores,192.168.2.10
+21,PC1,Sala Ordenadores,192.168.2.11
+22,PC2,Sala Ordenadores,192.168.2.12
+23,PC3,Sala Ordenadores,192.168.2.13
+24,PC4,Sala Ordenadores,192.168.2.14
+25,PC5,Sala Ordenadores,192.168.2.15
+26,PC6,Sala Ordenadores,192.168.2.16
+27,PC7,Sala Ordenadores,192.168.2.17
