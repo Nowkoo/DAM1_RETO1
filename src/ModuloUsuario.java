@@ -4,9 +4,8 @@ import java.util.Scanner;
 
 public class ModuloUsuario {
     static Scanner scanner = new Scanner(System.in);
-
-    static Usuario usuarioActual;//Se usa?? Borrar más adelante
     static Usuario usuarioEncontrado;
+    static int idIngresada;
     static String passwordIngresada;
     static boolean loginExitoso = false;
 
@@ -46,9 +45,21 @@ public class ModuloUsuario {
                     System.out.println();
                     break;
                 case 2:
-                    ArrayList<Peticion> peticionesUsuario = filtrarPeticionesPorUsuario(usuarioActual.getId());
+                    ArrayList<Peticion> peticionesUsuario = filtrarPeticionesPorUsuario(idIngresada);
                     imprimirPeticiones(peticionesUsuario);
-                    //modificarDescripcion();
+
+                    System.out.println("Introduzca el ID de la petición que quiere modificar: ");
+                    int indicePeticion = scanner.nextInt();
+                    scanner.nextLine();
+
+                    System.out.println("Introduzca la nueva descripción (se borrará la descripción anterior): ");
+                    String nuevaDescripcion = scanner.nextLine();
+
+                    boolean descripcionCambiada = modificarDescripcion(indicePeticion, nuevaDescripcion);
+
+                    if (!descripcionCambiada) {
+                        System.out.println("No tiene ninguna solicitud abierta con el ID de petición proporcionado: no se ha podido cambiar la descripción.");
+                    }
                     System.out.println();
                     break;
                 case 3:
@@ -68,7 +79,7 @@ public class ModuloUsuario {
 
     public static void identificarse(String rol){
         System.out.println("Ingresa tu ID de " + rol);
-        int idIngresada = scanner.nextInt();
+        idIngresada = scanner.nextInt();
         usuarioEncontrado = buscarUsuarioPorId(idIngresada);
         pedirPassword();
         validarPassword();
@@ -99,8 +110,6 @@ public class ModuloUsuario {
 
     }
 
-
-
     public static void cargarDatosUsuario() {
         try {
             BufferedReader f_ent = new BufferedReader(new FileReader(new File("./CSV/usuario.csv")));
@@ -127,6 +136,7 @@ public class ModuloUsuario {
             while (linea != null) {
                 String[] palabras = linea.split(",");
                 peticiones.add(new Peticion((Integer.parseInt(palabras[0])), Integer.parseInt(palabras[1]), palabras[2], palabras[3], Integer.parseInt(palabras[4]), Integer.parseInt(palabras[5]), Integer.parseInt(palabras[6]), stringToBoolean(palabras[7])));
+                linea = f_ent.readLine();
             }
             f_ent.close();
 
@@ -146,7 +156,7 @@ public class ModuloUsuario {
 
             }
             f_in.close();
-        }catch (IOException e){
+        } catch (IOException e){
             System.out.println(e.getMessage());
         }
     }
@@ -158,7 +168,9 @@ public class ModuloUsuario {
 
             for (int i = 0; i < peticiones.size(); i++) {
                 peticion = peticiones.get(i);
-                f_sal.println(peticion.getId() + "," + peticion.getIdUsuario() + "," + peticion.getDescripcion() + "," + peticion.getFecha() + "," + peticion.getIdCategoria() + "\n");
+                f_sal.println(peticion.getId() + "," + peticion.getIdUsuario() + "," + peticion.getFecha() + "," + peticion.getDescripcion() + "," + peticion.getIdCategoria() + "," + peticion.getIdAdmin() + "," + peticion.getEstado() + "," + peticion.getResuelta());
+                if (i != peticiones.size())
+                    System.out.println();
             }
             f_sal.close();
 
@@ -170,6 +182,17 @@ public class ModuloUsuario {
     public static void generarPeticion() {}
 
     public static void consultarPeticion() {}
+
+    public static boolean modificarDescripcion(int indicePeticion, String nuevaDescripcion) {
+        boolean descripcionCambiada = false;
+        for (int i = 0; i < peticiones.size(); i++) {
+            if (peticiones.get(i).getId() == indicePeticion) {
+                peticiones.get(i).setDescripcion(nuevaDescripcion);
+                descripcionCambiada = true;
+            }
+        }
+        return descripcionCambiada;
+    }
 
     public static ArrayList<Peticion> filtrarPeticionesPorUsuario(int idUsuario) {
         ArrayList<Peticion> peticionesUsuario = new ArrayList<>();
