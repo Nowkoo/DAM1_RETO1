@@ -1,5 +1,7 @@
 import java.io.*;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class ModuloUsuario {
@@ -26,18 +28,21 @@ public class ModuloUsuario {
 
         do {
             cargarDatosUsuario();
+            cargarDatosPeticiones();
+            cargarDatosCategorias();
             //Borrar luego
             mostrarUsuarios();
             //Borrar luego
             while(!loginExitoso){identificarse(rol);}
+
             mostrarMenu();
-            eleccionMenu = scanner.nextInt();
+            eleccionMenu = inputNumerico();
 
             if (eleccionMenu < 0 || eleccionMenu > 3) {
                 System.out.println("El número introducido no es válido, por favor introduce otro número");
             }
             if (eleccionMenu == 0)
-            guardarDatosPeticiones();
+                guardarDatosPeticiones();
 
             switch (eleccionMenu) {
                 case 1:
@@ -79,7 +84,7 @@ public class ModuloUsuario {
 
     public static void identificarse(String rol){
         System.out.println("Ingresa tu ID de " + rol);
-        idIngresada = scanner.nextInt();
+        idIngresada = inputNumerico();
         usuarioEncontrado = buscarUsuarioPorId(idIngresada);
         pedirPassword();
         validarPassword();
@@ -92,22 +97,33 @@ public class ModuloUsuario {
         }
         return null; // Devuelve null si no encuentra al usuario con la ID dada
     }
+
+    public static Categoria buscarCategoriaPorId(int id) {
+        for (Categoria categoria : categorias) {
+            if (categoria.getId() == id) {
+                return categoria;
+            }
+        }
+        return null; // Devuelve null si no encuentra al usuario con la ID dada
+    }
+
     public static void pedirPassword(){
         if (usuarioEncontrado!=null){
-            System.out.println("Ingresa tu contraseña\n");
+            System.out.println("Ingresa tu contraseña");
             passwordIngresada = scanner.next();
         }
         else{System.out.println("Usuario no encontrado.");}
     }
     public static void validarPassword(){
-        boolean passwordCoincide = passwordIngresada.equals(usuarioEncontrado.getPassword());
         boolean usuarioNoEsNulo = usuarioEncontrado != null;
 
-        if(passwordCoincide&&usuarioNoEsNulo){
-            System.out.println("\n¡Bienvenido, " + usuarioEncontrado.getNombre() + "! \uD83D\uDE00 \n");
-            loginExitoso = true;
-        }else{System.out.println("Contraseña incorrecta.");}
-
+        if(usuarioNoEsNulo) {
+            boolean passwordCoincide = passwordIngresada.equals(usuarioEncontrado.getPassword());
+            if (passwordCoincide) {
+                System.out.println("\n¡Bienvenido, " + usuarioEncontrado.getNombre() + "! \uD83D\uDE00 \n");
+                loginExitoso = true;
+            }else{System.out.println("Contraseña incorrecta.");}
+        }
     }
 
     public static void cargarDatosUsuario() {
@@ -149,6 +165,7 @@ public class ModuloUsuario {
         try{
             BufferedReader f_in= new BufferedReader(new FileReader(new File("./CSV/categoria.csv")));
             String fila=f_in.readLine();
+            fila=f_in.readLine();
             while(fila !=null){
                 String[] atributo =fila.split(",");
                 categorias.add(new Categoria((Integer.parseInt(atributo[0])),atributo [1]));
@@ -163,14 +180,14 @@ public class ModuloUsuario {
 
     public static void guardarDatosPeticiones() {
         try {
-            PrintWriter f_sal = new PrintWriter(new FileWriter("./CSV/peticion.csv"));
+            PrintWriter f_sal = new PrintWriter(new FileWriter(("./CSV/peticion.csv"), false), false);
             Peticion peticion;
+
+            f_sal.println("idPeticion,idUsuario,descripcion,fecha,idCategoria,idAdmin,estado,resuelta");
 
             for (int i = 0; i < peticiones.size(); i++) {
                 peticion = peticiones.get(i);
-                f_sal.println(peticion.getId() + "," + peticion.getIdUsuario() + "," + peticion.getFecha() + "," + peticion.getDescripcion() + "," + peticion.getIdCategoria() + "," + peticion.getIdAdmin() + "," + peticion.getEstado() + "," + peticion.getResuelta());
-                if (i != peticiones.size())
-                    System.out.println();
+                f_sal.println(peticion.getId() + "," + peticion.getIdUsuario() + "," + peticion.getDescripcion() + "," + peticion.getFecha() + "," + peticion.getIdCategoria() + "," + peticion.getIdAdmin() + "," + peticion.getEstado() + "," + peticion.getResuelta());
             }
             f_sal.close();
 
@@ -197,7 +214,7 @@ public class ModuloUsuario {
     public static ArrayList<Peticion> filtrarPeticionesPorUsuario(int idUsuario) {
         ArrayList<Peticion> peticionesUsuario = new ArrayList<>();
 
-        for (int i = 0; i < peticionesUsuario.size(); i++) {
+        for (int i = 0; i < peticiones.size(); i++) {
             if (idUsuario == peticiones.get(i).getIdUsuario()) {
                 peticionesUsuario.add(peticiones.get(i));
             }
@@ -207,6 +224,13 @@ public class ModuloUsuario {
 
     public static void imprimirPeticiones(ArrayList<Peticion> listaPeticiones) {
         for (Peticion peticion : listaPeticiones) {
+            Usuario usuarioActual = buscarUsuarioPorId(peticion.getId());
+            Categoria categoria = buscarCategoriaPorId(peticion.getIdCategoria());
+
+            System.out.println("ID: " + peticion.getId() + "\t|\tFecha: " + peticion.getFecha() + "\t|\tPor: " + usuarioActual.getNombre());
+            assert categoria != null;
+            System.out.println("Categoría: " + categoria.getCategoria());
+            System.out.println("Descripción: " + peticion.getDescripcion());
             System.out.println();
         }
     }
@@ -219,5 +243,17 @@ public class ModuloUsuario {
             b = false;
 
         return b;
+    }
+
+    static int inputNumerico() {
+        Scanner scanner = new Scanner(System.in);
+        int input;
+        try {
+            input = scanner.nextInt();
+            scanner.nextLine();
+        } catch (InputMismatchException e) {
+            input = -10;
+        }
+        return input;
     }
 }
