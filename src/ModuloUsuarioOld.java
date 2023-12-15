@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class ModuloUsuario {
+public class ModuloUsuarioOld {
     static Scanner scanner = new Scanner(System.in);
     static Usuario usuarioEncontrado;
     static int idIngresada;
@@ -75,7 +75,6 @@ public class ModuloUsuario {
             }
         } while (eleccionMenu != 0);
     }
-
     public static void mostrarMenu() {
         System.out.println("0-Salir del programa");
         System.out.println("1-Generar una petición");
@@ -115,7 +114,6 @@ public class ModuloUsuario {
         }
         else{System.out.println("Usuario no encontrado.");}
     }
-
     public static void validarPassword(){
         boolean usuarioNoEsNulo = usuarioEncontrado != null;
 
@@ -211,7 +209,7 @@ public class ModuloUsuario {
 
         Peticion nuevaPeticion = new Peticion(
                 obtenerNuevoIdPeticion(),
-                idIngresada,
+                usuarioActual.getId(),
                 descripcion,
                 fecha,
                 idCategoria,
@@ -264,7 +262,13 @@ public class ModuloUsuario {
     }
 
     public static boolean stringToBoolean(String s) {
-        return s.equals("true");
+        boolean b;
+        if (s.equals("true")) {
+            b = true;
+        } else
+            b = false;
+
+        return b;
     }
 
     static int inputNumerico() {
