@@ -2,26 +2,30 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ModuloAdmin {
-    private static ArrayList<Usuario> usuarios;
-    private static ArrayList<Peticion> peticiones;
-    private static ArrayList<Categoria> categorias;
-    private static ArrayList<Admin> admins;
-    private static ArrayList<Ticket> tickets;
-    private static ArrayList<Tecnico> tecnicos;
+    private static ArrayList<Usuario> usuarios = new ArrayList<>();
+    private static ArrayList<Peticion> peticiones = new ArrayList<>();
+    private static ArrayList<Categoria> categorias = new ArrayList<>();
+    private static ArrayList<Admin> admins = new ArrayList<>();
+    private static ArrayList<Ticket> tickets = new ArrayList<>();
+    private static ArrayList<Tecnico> tecnicos = new ArrayList<>();
 
-    private Usuario usuarioActual;
+    static Admin usuarioEncontrado;
+    static boolean loginExitoso = false;
+    static int idIngresada;
+    static String passwordIngresada;
     static Scanner scanner;
 
     public static void main(String[] args) {
         scanner = new Scanner(System.in);
-        usuarios = GestorDatos.cargarDatosUsuario(usuarios);
-        peticiones = GestorDatos.cargarDatosPeticiones(peticiones);
-        categorias = GestorDatos.cargarDatosCategorias(categorias);
+        cargarDatos();
 
         int eleccionMenu;
-        String rol = "usuario";
 
         do {
+            mostrarUsuarios();
+            while (!loginExitoso) {
+                identificarse();
+            }
 
             mostrarMenu();
             eleccionMenu = Utilidades.inputNumerico();
@@ -45,14 +49,55 @@ public class ModuloAdmin {
 
     }
 
+    public static void cargarDatos() {
+        usuarios = GestorDatos.cargarDatosUsuario(usuarios);
+        peticiones = GestorDatos.cargarDatosPeticiones(peticiones);
+        categorias = GestorDatos.cargarDatosCategorias(categorias);
+        admins = GestorDatos.cargarDatosAdmins(admins);
+        tickets = GestorDatos.cargarDatosTickets(tickets);
+        //tecnicos = GestorDatos.cargarDatosTecnicos(tecnicos);
+    }
+
     public static void mostrarMenu() {
         System.out.println("0-Salir del programa");
         System.out.println("1-Consultar peticiones");
         System.out.println("2-Consultar tickets");
     }
 
-    public static void loginAdmin(String rol) {
+    public static void identificarse() {
+        System.out.println("Ingresa tu ID de administrador");
+        idIngresada = Utilidades.inputNumerico();
+        usuarioEncontrado = Utilidades.buscarAdminisPorId(idIngresada, admins);
+        pedirPassword();
+        validarPassword();
+    }
 
+    public static void pedirPassword() {
+        if (usuarioEncontrado != null) {
+            System.out.println("Ingresa tu contraseña");
+            passwordIngresada = scanner.next();
+        } else {
+            System.out.println("Usuario no encontrado.");
+        }
+    }
+
+    public static void validarPassword() {
+        boolean usuarioNoEsNulo = usuarioEncontrado != null;
+
+        if (usuarioNoEsNulo) {
+            boolean passwordCoincide = passwordIngresada.equals(usuarioEncontrado.getPassword());
+            if (passwordCoincide) {
+                System.out.println("\n¡Bienvenido, " + usuarioEncontrado.getNombre() + "! \uD83D\uDE00 \n");
+                loginExitoso = true;
+            } else {
+                System.out.println("Contraseña incorrecta.");
+            }
+        }
+    }
+
+    public static void mostrarUsuarios() {
+        System.out.println("//Iniciar sesión con ID: " + admins.get(0).getId() + ", CONTRASEÑA: " + admins.get(0).getPassword());
+        System.out.println();
     }
 
     public static void consultarPeticiones() {

@@ -1,3 +1,5 @@
+import jdk.jshell.execution.Util;
+
 import java.io.*;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
@@ -11,7 +13,7 @@ public class ModuloUsuario {
     static String passwordIngresada;
     static boolean loginExitoso = false;
 
-    static ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
+    static ArrayList<Usuario> usuarios = new ArrayList<>();
     static ArrayList<Categoria> categorias = new ArrayList<>();
     static ArrayList<Peticion> peticiones = new ArrayList<>();
 
@@ -29,7 +31,6 @@ public class ModuloUsuario {
         do {
 
             mostrarUsuarios();
-
             while (!loginExitoso) {
                 identificarse(rol);
             }
@@ -41,7 +42,6 @@ public class ModuloUsuario {
                 System.out.println("El número introducido no es válido, por favor introduce otro número");
             }
             if (eleccionMenu == 0) {
-                System.out.println(peticiones.size());
                 GestorDatos.guardarDatosPeticiones(peticiones);
             }
 
@@ -98,27 +98,9 @@ public class ModuloUsuario {
     public static void identificarse(String rol) {
         System.out.println("Ingresa tu ID de " + rol);
         idIngresada = Utilidades.inputNumerico();
-        usuarioEncontrado = buscarUsuarioPorId(idIngresada);
+        usuarioEncontrado = Utilidades.buscarUsuarioPorId(idIngresada, usuarios);
         pedirPassword();
         validarPassword();
-    }
-
-    public static Usuario buscarUsuarioPorId(int id) {
-        for (Usuario usuario : usuarios) {
-            if (usuario.getId() == id) {
-                return usuario;
-            }
-        }
-        return null; // Devuelve null si no encuentra al usuario con la ID dada
-    }
-
-    public static Categoria buscarCategoriaPorId(int id) {
-        for (Categoria categoria : categorias) {
-            if (categoria.getId() == id) {
-                return categoria;
-            }
-        }
-        return null; // Devuelve null si no encuentra al usuario con la ID dada
     }
 
     public static void pedirPassword() {
@@ -154,7 +136,7 @@ public class ModuloUsuario {
 
         mostrarCategorias();
         System.out.println("Ingrese el número de la categoría de la petición:");
-        int idCategoria = scanner.nextInt();
+        int idCategoria = Utilidades.inputNumerico();
 
         Peticion nuevaPeticion = new Peticion(
                 obtenerNuevoIdPeticion(),
@@ -181,8 +163,8 @@ public class ModuloUsuario {
         System.out.println("Introduce la Id de la peticion que deseas consultar: ");
         int idconsultarPeticion = Utilidades.inputNumerico();
         Peticion PeticionConsultada = buscarPeticionPorId(idconsultarPeticion);
-        Usuario usuarioActual = buscarUsuarioPorId(PeticionConsultada.getIdUsuario());
-        Categoria categoria = buscarCategoriaPorId(PeticionConsultada.getIdCategoria());
+        Usuario usuarioActual = Utilidades.buscarUsuarioPorId(PeticionConsultada.getIdUsuario(), usuarios);
+        Categoria categoria = Utilidades.buscarCategoriaPorId(PeticionConsultada.getIdCategoria(), categorias);
 
         if (PeticionConsultada != null){
             System.out.println("Id:" +PeticionConsultada.getId());
@@ -197,8 +179,8 @@ public class ModuloUsuario {
         }
     }
     public static void mostrarPeticion(Peticion peticion){
-        Usuario usuarioActual= buscarUsuarioPorId(peticion.getIdUsuario());
-        Categoria categoria = buscarCategoriaPorId(peticion.getIdCategoria());
+        Usuario usuarioActual= Utilidades.buscarUsuarioPorId(peticion.getIdUsuario(), usuarios);
+        Categoria categoria = Utilidades.buscarCategoriaPorId(peticion.getIdCategoria(), categorias);
         System.out.println("Id: " +peticion.getId());
         System.out.println("Categoria: " + categoria.getCategoria());
         System.out.println("Descripcio: " + peticion.getDescripcion());
@@ -238,11 +220,10 @@ public class ModuloUsuario {
     }
     public static void imprimirPeticiones(ArrayList<Peticion> listaPeticiones) {
         for (Peticion peticion : listaPeticiones) {
-            Usuario usuarioActual = buscarUsuarioPorId(peticion.getId());
-            Categoria categoria = buscarCategoriaPorId(peticion.getIdCategoria());
+            Usuario usuarioActual = Utilidades.buscarUsuarioPorId(peticion.getId(), usuarios);
+            Categoria categoria = Utilidades.buscarCategoriaPorId(peticion.getIdCategoria(), categorias);
 
             System.out.println("ID: " + peticion.getId() + "\t|\tFecha: " + peticion.getFecha() + "\t|\tPor: " + usuarioActual.getNombre());
-            assert categoria != null;
             System.out.println("Categoría: " + categoria.getCategoria());
             System.out.println("Descripción: " + peticion.getDescripcion());
             System.out.println();
