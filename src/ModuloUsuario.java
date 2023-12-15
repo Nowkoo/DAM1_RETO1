@@ -226,6 +226,10 @@ public class ModuloUsuario {
         System.out.println("La petición ha sido generada con éxito.");
     }
 
+    public static int obtenerNuevoIdPeticion() {
+        return peticiones.size() + 1;
+    }
+
     public static void consultarPeticion() {}
 
     public static boolean modificarDescripcion(int indicePeticion, String nuevaDescripcion) {
