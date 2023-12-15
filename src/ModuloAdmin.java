@@ -11,7 +11,8 @@ public class ModuloAdmin {
 
     }
 
-    public static void loginAdmin() {
+    public static void loginAdmin(String rol) {
+        System.out.println("Ingresa tu ID de " + rol);
 
     }
 

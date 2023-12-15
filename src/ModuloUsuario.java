@@ -12,7 +12,7 @@ public class ModuloUsuario {
     static boolean loginExitoso = false;
 
     static ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
-    static ArrayList<Categoria> categorias=new ArrayList<>();
+    static ArrayList<Categoria> categorias = new ArrayList<>();
     static ArrayList<Peticion> peticiones = new ArrayList<>();
 
     //Método que he usado para recorrer el arraylist usuarios
@@ -22,6 +22,7 @@ public class ModuloUsuario {
             System.out.println("ID: " + usuario.getId() + ", Nombre: " + usuario.getNombre() + ", Contraseña: " + usuario.getPassword());
         }
     }
+
     public static void main(String[] args) {
         int eleccionMenu;
         String rol = "usuario";
@@ -33,7 +34,9 @@ public class ModuloUsuario {
             //Borrar luego
             mostrarUsuarios();
             //Borrar luego
-            while(!loginExitoso){identificarse(rol);}
+            while (!loginExitoso) {
+                identificarse(rol);
+            }
 
             mostrarMenu();
             eleccionMenu = inputNumerico();
@@ -83,13 +86,14 @@ public class ModuloUsuario {
         System.out.println("3-Consultar la petición");
     }
 
-    public static void identificarse(String rol){
+    public static void identificarse(String rol) {
         System.out.println("Ingresa tu ID de " + rol);
         idIngresada = inputNumerico();
         usuarioEncontrado = buscarUsuarioPorId(idIngresada);
         pedirPassword();
         validarPassword();
     }
+
     public static Usuario buscarUsuarioPorId(int id) {
         for (Usuario usuario : usuarios) {
             if (usuario.getId() == id) {
@@ -108,23 +112,26 @@ public class ModuloUsuario {
         return null; // Devuelve null si no encuentra al usuario con la ID dada
     }
 
-    public static void pedirPassword(){
-        if (usuarioEncontrado!=null){
+    public static void pedirPassword() {
+        if (usuarioEncontrado != null) {
             System.out.println("Ingresa tu contraseña");
             passwordIngresada = scanner.next();
+        } else {
+            System.out.println("Usuario no encontrado.");
         }
-        else{System.out.println("Usuario no encontrado.");}
     }
 
-    public static void validarPassword(){
+    public static void validarPassword() {
         boolean usuarioNoEsNulo = usuarioEncontrado != null;
 
-        if(usuarioNoEsNulo) {
+        if (usuarioNoEsNulo) {
             boolean passwordCoincide = passwordIngresada.equals(usuarioEncontrado.getPassword());
             if (passwordCoincide) {
                 System.out.println("\n¡Bienvenido, " + usuarioEncontrado.getNombre() + "! \uD83D\uDE00 \n");
                 loginExitoso = true;
-            }else{System.out.println("Contraseña incorrecta.");}
+            } else {
+                System.out.println("Contraseña incorrecta.");
+            }
         }
     }
 
@@ -164,18 +171,18 @@ public class ModuloUsuario {
     }
 
     public static void cargarDatosCategorias() {
-        try{
-            BufferedReader f_in= new BufferedReader(new FileReader(new File("./CSV/categoria.csv")));
-            String fila=f_in.readLine();
-            fila=f_in.readLine();
-            while(fila !=null){
-                String[] atributo =fila.split(",");
-                categorias.add(new Categoria((Integer.parseInt(atributo[0])),atributo [1]));
-                fila= f_in.readLine();
+        try {
+            BufferedReader f_in = new BufferedReader(new FileReader(new File("./CSV/categoria.csv")));
+            String fila = f_in.readLine();
+            fila = f_in.readLine();
+            while (fila != null) {
+                String[] atributo = fila.split(",");
+                categorias.add(new Categoria((Integer.parseInt(atributo[0])), atributo[1]));
+                fila = f_in.readLine();
 
             }
             f_in.close();
-        } catch (IOException e){
+        } catch (IOException e) {
             System.out.println(e.getMessage());
         }
     }
@@ -230,7 +237,8 @@ public class ModuloUsuario {
         return peticiones.size() + 1;
     }
 
-    public static void consultarPeticion() {}
+    public static void consultarPeticion() {
+    }
 
     public static boolean modificarDescripcion(int indicePeticion, String nuevaDescripcion) {
         boolean descripcionCambiada = false;
