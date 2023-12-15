@@ -59,4 +59,39 @@ public class GestorDatos {
         }
         return c;
     }
+    public static ArrayList<Admin> cargarDatosAdmins(ArrayList<Admin> a) {
+        try {
+            BufferedReader f_in = new BufferedReader(new FileReader(new File("./CSV/admin.csv")));
+            String fila = f_in.readLine();
+            fila = f_in.readLine();
+            while (fila != null) {
+                String[] atributo = fila.split(",");
+                a.add(new Admin((Integer.parseInt(atributo[0])),atributo[1],atributo[2]));
+                fila = f_in.readLine();
+
+            }
+            f_in.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+        return a;
+    }
+    public static ArrayList<Ticket> cargarDatosTickets(ArrayList<Ticket> t) {
+        try {
+            BufferedReader f_in = new BufferedReader(new FileReader(new File("./CSV/ticket.csv")));
+            String fila = f_in.readLine();
+            fila = f_in.readLine();
+            while (fila != null) {
+                String[] atributo = fila.split(",");
+            //    t.add(new Ticket((Integer.parseInt(atributo[0])),Integer.parseInt(atributo[1],Integer.parseInt(atributo[2]), Integer.parseInt(atributo[3]);
+                fila = f_in.readLine();
+
+            }
+            f_in.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+        return t;
+    }
+
 }
