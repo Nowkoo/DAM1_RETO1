@@ -17,11 +17,6 @@ public class ModuloUsuario {
 
     //Método que he usado para recorrer el arraylist usuarios
     //No es necesario pero podría mantenerse como una opción a la que puede acceder el admin
-    public static void mostrarUsuarios() {
-        for (Usuario usuario : usuarios) {
-            System.out.println("ID: " + usuario.getId() + ", Nombre: " + usuario.getNombre() + ", Contraseña: " + usuario.getPassword());
-        }
-    }
 
     public static void main(String[] args) {
         usuarios = GestorDatos.cargarDatosUsuario(usuarios);
@@ -32,22 +27,22 @@ public class ModuloUsuario {
         String rol = "usuario";
 
         do {
-            //Borrar luego
+
             mostrarUsuarios();
-            //Borrar luego
+
             while (!loginExitoso) {
                 identificarse(rol);
             }
 
             mostrarMenu();
-            eleccionMenu = inputNumerico();
+            eleccionMenu = Utilidades.inputNumerico();
 
             if (eleccionMenu < 0 || eleccionMenu > 3) {
                 System.out.println("El número introducido no es válido, por favor introduce otro número");
             }
             if (eleccionMenu == 0) {
                 System.out.println(peticiones.size());
-                guardarDatosPeticiones();
+                GestorDatos.guardarDatosPeticiones(peticiones);
             }
 
             switch (eleccionMenu) {
@@ -82,6 +77,17 @@ public class ModuloUsuario {
         } while (eleccionMenu != 0);
     }
 
+    public static void mostrarUsuarios() {
+        System.out.println("//Iniciar sesión con ID: " + usuarios.get(0).getId() + ", CONTRASEÑA: " + usuarios.get(0).getPassword());
+        System.out.println();
+    }
+
+    public static void mostrarCategorias() {
+        for (Categoria categoria : categorias) {
+            System.out.println(categoria.getId() + " " + categoria.getCategoria());
+        }
+    }
+
     public static void mostrarMenu() {
         System.out.println("0-Salir del programa");
         System.out.println("1-Generar una petición");
@@ -91,7 +97,7 @@ public class ModuloUsuario {
 
     public static void identificarse(String rol) {
         System.out.println("Ingresa tu ID de " + rol);
-        idIngresada = inputNumerico();
+        idIngresada = Utilidades.inputNumerico();
         usuarioEncontrado = buscarUsuarioPorId(idIngresada);
         pedirPassword();
         validarPassword();
@@ -138,26 +144,6 @@ public class ModuloUsuario {
         }
     }
 
-    public static void guardarDatosPeticiones() {
-        try {
-            File peticionCSV = new File("./CSV/peticion.csv");
-
-            PrintWriter f_sal = new PrintWriter(new FileWriter((peticionCSV), false), false);
-            Peticion peticion;
-
-            f_sal.println("idPeticion,idUsuario,descripcion,fecha,idCategoria,idAdmin,estado,resuelta");
-
-            for (int i = 0; i < peticiones.size(); i++) {
-                peticion = peticiones.get(i);
-                f_sal.println(peticion.getId() + "," + peticion.getIdUsuario() + "," + peticion.getDescripcion() + "," + peticion.getFecha() + "," + peticion.getIdCategoria() + "," + peticion.getIdAdmin() + "," + peticion.getEstado() + "," + peticion.getResuelta());
-            }
-            f_sal.close();
-
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
     public static void generarPeticion() {
         scanner.nextLine();
 
@@ -166,7 +152,8 @@ public class ModuloUsuario {
 
         String fecha = Fecha.ObtenerFechaActual();
 
-        System.out.println("Ingrese el ID de la categoría de la petición:");
+        mostrarCategorias();
+        System.out.println("Ingrese el número de la categoría de la petición:");
         int idCategoria = scanner.nextInt();
 
         Peticion nuevaPeticion = new Peticion(
@@ -192,19 +179,20 @@ public class ModuloUsuario {
 
     public static void consultarPeticion() {
         System.out.println("Introduce la Id de la peticion que deseas consultar: ");
-        int idconsultarPeticion= inputNumerico();
-        Peticion PeticionConsultada=buscarPeticionPorId(idconsultarPeticion);
-        Usuario usuarioActual= buscarUsuarioPorId(PeticionConsultada.getIdUsuario());
+        int idconsultarPeticion = Utilidades.inputNumerico();
+        Peticion PeticionConsultada = buscarPeticionPorId(idconsultarPeticion);
+        Usuario usuarioActual = buscarUsuarioPorId(PeticionConsultada.getIdUsuario());
         Categoria categoria = buscarCategoriaPorId(PeticionConsultada.getIdCategoria());
-        if (PeticionConsultada !=null){
+
+        if (PeticionConsultada != null){
             System.out.println("Id:" +PeticionConsultada.getId());
             System.out.println("Usuario: " + usuarioActual.getNombre());//usuarioActual es temporal, más adelante arreglarlo
             System.out.println("Categoria: " + categoria.getCategoria());
             System.out.println("Descripcion: " + PeticionConsultada.getDescripcion() );
             System.out.println("Fecha: " + PeticionConsultada.getFecha());
-            System.out.println("Estado: "+PeticionConsultada.getResuelta());
+            System.out.println("Estado: " + PeticionConsultada.getResuelta());
 
-        }else {
+        } else {
             System.out.println("La Id introducida para mostrar la peticion es erronea.");
         }
     }
@@ -259,21 +247,5 @@ public class ModuloUsuario {
             System.out.println("Descripción: " + peticion.getDescripcion());
             System.out.println();
         }
-    }
-
-    public static boolean stringToBoolean(String s) {
-        return s.equals("true");
-    }
-
-    public static int inputNumerico() {
-        Scanner scanner = new Scanner(System.in);
-        int input;
-        try {
-            input = scanner.nextInt();
-            scanner.nextLine();
-        } catch (InputMismatchException e) {
-            input = -10;
-        }
-        return input;
     }
 }

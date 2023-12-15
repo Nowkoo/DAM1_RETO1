@@ -1,7 +1,4 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 
 public class GestorDatos {
@@ -31,7 +28,7 @@ public class GestorDatos {
 
             while (linea != null) {
                 String[] palabras = linea.split(",");
-                p.add(new Peticion((Integer.parseInt(palabras[0])), Integer.parseInt(palabras[1]), palabras[2], palabras[3], Integer.parseInt(palabras[4]), Integer.parseInt(palabras[5]), Integer.parseInt(palabras[6]), ModuloUsuario.stringToBoolean(palabras[7])));
+                p.add(new Peticion((Integer.parseInt(palabras[0])), Integer.parseInt(palabras[1]), palabras[2], palabras[3], Integer.parseInt(palabras[4]), Integer.parseInt(palabras[5]), Integer.parseInt(palabras[6]), Utilidades.stringToBoolean(palabras[7])));
                 linea = f_ent.readLine();
             }
             f_ent.close();
@@ -83,9 +80,8 @@ public class GestorDatos {
             fila = f_in.readLine();
             while (fila != null) {
                 String[] atributo = fila.split(",");
-            //    t.add(new Ticket((Integer.parseInt(atributo[0])),Integer.parseInt(atributo[1],Integer.parseInt(atributo[2]), Integer.parseInt(atributo[3]);
+                t.add(new Ticket((Integer.parseInt(atributo[0])),Integer.parseInt(atributo[1]),Integer.parseInt(atributo[2]), Integer.parseInt(atributo[3]), Integer.parseInt(atributo[4]), atributo[5], atributo[6]));
                 fila = f_in.readLine();
-
             }
             f_in.close();
         } catch (IOException e) {
@@ -94,4 +90,43 @@ public class GestorDatos {
         return t;
     }
 
+    public static void guardarDatosPeticiones(ArrayList<Peticion> p) {
+        try {
+            File peticionCSV = new File("./CSV/peticion.csv");
+
+            PrintWriter f_sal = new PrintWriter(new FileWriter((peticionCSV), false), false);
+            Peticion peticion;
+
+            f_sal.println("idPeticion,idUsuario,descripcion,fecha,idCategoria,idAdmin,estado,resuelta");
+
+            for (int i = 0; i < p.size(); i++) {
+                peticion = p.get(i);
+                f_sal.println(peticion.getId() + "," + peticion.getIdUsuario() + "," + peticion.getDescripcion() + "," + peticion.getFecha() + "," + peticion.getIdCategoria() + "," + peticion.getIdAdmin() + "," + peticion.getEstado() + "," + peticion.getResuelta());
+            }
+            f_sal.close();
+
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void guardarDatosTickets(ArrayList<Ticket> t) {
+        try {
+            File peticionCSV = new File("./CSV/peticion.csv");
+
+            PrintWriter f_sal = new PrintWriter(new FileWriter((peticionCSV), false), false);
+            Ticket ticket;
+
+            f_sal.println("idTicket,idAdministrador,idTecnico,idDispositivo,urgencia,estado,descripcionTarea");
+
+            for (int i = 0; i < t.size(); i++) {
+                ticket = t.get(i);
+                f_sal.println(ticket.getId() + "," + ticket.getId() + "," + ticket.getIdAdmin() + "," + ticket.getIdTecnico() + "," + ticket.getIdDispositivos() + "," + ticket.getUrgencia() + "," + ticket.getEstado() + "," + ticket.getDescripcion());
+            }
+            f_sal.close();
+
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }
