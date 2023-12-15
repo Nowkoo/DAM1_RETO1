@@ -191,7 +191,33 @@ public class ModuloUsuario {
     }
 
     public static void consultarPeticion() {
+        System.out.println("Introduce la Id de la peticion que deseas consultar: ");
+        int idconsultarPeticion= inputNumerico();
+        Peticion PeticionConsultada=buscarPeticionPorId(idconsultarPeticion);
+        Usuario usuarioActual= buscarUsuarioPorId(PeticionConsultada.getIdUsuario());
+        Categoria categoria = buscarCategoriaPorId(PeticionConsultada.getIdCategoria());
+        if (PeticionConsultada !=null){
+            System.out.println("Id:" +PeticionConsultada.getId());
+            System.out.println("Usuario: " + usuarioActual.getNombre());//usuarioActual es temporal, más adelante arreglarlo
+            System.out.println("Categoria: " + categoria.getCategoria());
+            System.out.println("Descripcion: " + PeticionConsultada.getDescripcion() );
+            System.out.println("Fecha: " + PeticionConsultada.getFecha());
+            System.out.println("Estado: "+PeticionConsultada.getResuelta());
+
+        }else {
+            System.out.println("La Id introducida para mostrar la peticion es erronea.");
+        }
     }
+    public static void mostrarPeticion(Peticion peticion){
+        Usuario usuarioActual= buscarUsuarioPorId(peticion.getIdUsuario());
+        Categoria categoria = buscarCategoriaPorId(peticion.getIdCategoria());
+        System.out.println("Id: " +peticion.getId());
+        System.out.println("Categoria: " + categoria.getCategoria());
+        System.out.println("Descripcio: " + peticion.getDescripcion());
+        System.out.println("Fecha: " + peticion.getFecha());
+        System.out.println("Estado: " + peticion.getEstado());
+    }
+
 
     public static boolean modificarDescripcion(int indicePeticion, String nuevaDescripcion) {
         boolean descripcionCambiada = false;
@@ -214,7 +240,14 @@ public class ModuloUsuario {
         }
         return peticionesUsuario;
     }
-
+    public static Peticion buscarPeticionPorId(int id) {
+        for (Peticion peticion : peticiones) {
+            if (peticion.getId() == id) {
+                return peticion;
+            }
+        }
+        return null; // Devuelve null si no encuentra la petición con la ID dada
+    }
     public static void imprimirPeticiones(ArrayList<Peticion> listaPeticiones) {
         for (Peticion peticion : listaPeticiones) {
             Usuario usuarioActual = buscarUsuarioPorId(peticion.getId());
