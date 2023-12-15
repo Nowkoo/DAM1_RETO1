@@ -24,13 +24,14 @@ public class ModuloUsuario {
     }
 
     public static void main(String[] args) {
+        usuarios = GestorDatos.cargarDatosUsuario(usuarios);
+        peticiones = GestorDatos.cargarDatosPeticiones(peticiones);
+        categorias = GestorDatos.cargarDatosCategorias(categorias);
+
         int eleccionMenu;
         String rol = "usuario";
 
         do {
-            cargarDatosUsuario();
-            cargarDatosPeticiones();
-            cargarDatosCategorias();
             //Borrar luego
             mostrarUsuarios();
             //Borrar luego
@@ -44,8 +45,10 @@ public class ModuloUsuario {
             if (eleccionMenu < 0 || eleccionMenu > 3) {
                 System.out.println("El número introducido no es válido, por favor introduce otro número");
             }
-            if (eleccionMenu == 0)
+            if (eleccionMenu == 0) {
+                System.out.println(peticiones.size());
                 guardarDatosPeticiones();
+            }
 
             switch (eleccionMenu) {
                 case 1:
@@ -135,61 +138,11 @@ public class ModuloUsuario {
         }
     }
 
-    public static void cargarDatosUsuario() {
-        try {
-            BufferedReader f_ent = new BufferedReader(new FileReader(new File("./CSV/usuario.csv")));
-            String linea = f_ent.readLine();
-            linea = f_ent.readLine();
-
-            while (linea != null) {
-                String[] palabras = linea.split(",");
-                usuarios.add(new Usuario((Integer.parseInt(palabras[0])), palabras[1], palabras[2]));
-                linea = f_ent.readLine();
-            }
-
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public static void cargarDatosPeticiones() {
-        try {
-            BufferedReader f_ent = new BufferedReader(new FileReader(new File("./CSV/peticion.csv")));
-            String linea = f_ent.readLine();
-            linea = f_ent.readLine();
-
-            while (linea != null) {
-                String[] palabras = linea.split(",");
-                peticiones.add(new Peticion((Integer.parseInt(palabras[0])), Integer.parseInt(palabras[1]), palabras[2], palabras[3], Integer.parseInt(palabras[4]), Integer.parseInt(palabras[5]), Integer.parseInt(palabras[6]), stringToBoolean(palabras[7])));
-                linea = f_ent.readLine();
-            }
-            f_ent.close();
-
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public static void cargarDatosCategorias() {
-        try {
-            BufferedReader f_in = new BufferedReader(new FileReader(new File("./CSV/categoria.csv")));
-            String fila = f_in.readLine();
-            fila = f_in.readLine();
-            while (fila != null) {
-                String[] atributo = fila.split(",");
-                categorias.add(new Categoria((Integer.parseInt(atributo[0])), atributo[1]));
-                fila = f_in.readLine();
-
-            }
-            f_in.close();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
     public static void guardarDatosPeticiones() {
         try {
-            PrintWriter f_sal = new PrintWriter(new FileWriter(("./CSV/peticion.csv"), false), false);
+            File peticionCSV = new File("./CSV/peticion.csv");
+
+            PrintWriter f_sal = new PrintWriter(new FileWriter((peticionCSV), false), false);
             Peticion peticion;
 
             f_sal.println("idPeticion,idUsuario,descripcion,fecha,idCategoria,idAdmin,estado,resuelta");
@@ -238,7 +191,33 @@ public class ModuloUsuario {
     }
 
     public static void consultarPeticion() {
+        System.out.println("Introduce la Id de la peticion que deseas consultar: ");
+        int idconsultarPeticion= inputNumerico();
+        Peticion PeticionConsultada=buscarPeticionPorId(idconsultarPeticion);
+        Usuario usuarioActual= buscarUsuarioPorId(PeticionConsultada.getIdUsuario());
+        Categoria categoria = buscarCategoriaPorId(PeticionConsultada.getIdCategoria());
+        if (PeticionConsultada !=null){
+            System.out.println("Id:" +PeticionConsultada.getId());
+            System.out.println("Usuario: " + usuarioActual.getNombre());//usuarioActual es temporal, más adelante arreglarlo
+            System.out.println("Categoria: " + categoria.getCategoria());
+            System.out.println("Descripcion: " + PeticionConsultada.getDescripcion() );
+            System.out.println("Fecha: " + PeticionConsultada.getFecha());
+            System.out.println("Estado: "+PeticionConsultada.getResuelta());
+
+        }else {
+            System.out.println("La Id introducida para mostrar la peticion es erronea.");
+        }
     }
+    public static void mostrarPeticion(Peticion peticion){
+        Usuario usuarioActual= buscarUsuarioPorId(peticion.getIdUsuario());
+        Categoria categoria = buscarCategoriaPorId(peticion.getIdCategoria());
+        System.out.println("Id: " +peticion.getId());
+        System.out.println("Categoria: " + categoria.getCategoria());
+        System.out.println("Descripcio: " + peticion.getDescripcion());
+        System.out.println("Fecha: " + peticion.getFecha());
+        System.out.println("Estado: " + peticion.getEstado());
+    }
+
 
     public static boolean modificarDescripcion(int indicePeticion, String nuevaDescripcion) {
         boolean descripcionCambiada = false;
@@ -261,7 +240,14 @@ public class ModuloUsuario {
         }
         return peticionesUsuario;
     }
-
+    public static Peticion buscarPeticionPorId(int id) {
+        for (Peticion peticion : peticiones) {
+            if (peticion.getId() == id) {
+                return peticion;
+            }
+        }
+        return null; // Devuelve null si no encuentra la petición con la ID dada
+    }
     public static void imprimirPeticiones(ArrayList<Peticion> listaPeticiones) {
         for (Peticion peticion : listaPeticiones) {
             Usuario usuarioActual = buscarUsuarioPorId(peticion.getId());
@@ -279,7 +265,7 @@ public class ModuloUsuario {
         return s.equals("true");
     }
 
-    static int inputNumerico() {
+    public static int inputNumerico() {
         Scanner scanner = new Scanner(System.in);
         int input;
         try {

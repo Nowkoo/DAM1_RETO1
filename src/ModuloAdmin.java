@@ -1,22 +1,48 @@
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class ModuloAdmin {
-
-    static Scanner scanner = new Scanner(System.in);
-
-    private ArrayList usuarios;
-    private ArrayList peticiones;
-    private ArrayList categoria;
-    private static ArrayList tickets;
-    private static ArrayList tecnicos;
-    private static ArrayList Administradores;
-
+    private static ArrayList usuarios;
+    private static ArrayList peticiones;
+    private static ArrayList categorias;
 
     private Usuario usuarioActual;
 
     public static void main(String[] args) {
+        usuarios = GestorDatos.cargarDatosUsuario(usuarios);
+        peticiones = GestorDatos.cargarDatosPeticiones(peticiones);
+        categorias = GestorDatos.cargarDatosCategorias(categorias);
 
+        int eleccionMenu;
+        String rol = "usuario";
+
+        do {
+
+            mostrarMenu();
+            eleccionMenu = ModuloUsuario.inputNumerico();
+
+            if (eleccionMenu < 0 || eleccionMenu > 3) {
+                System.out.println("El número introducido no es válido, por favor introduce otro número");
+            }
+            if (eleccionMenu == 0) {
+                guardarDatosPeticiones();
+            }
+
+            switch (eleccionMenu) {
+                case 1:
+                    consultarPeticiones();
+                    break;
+                case 2:
+                    consultarTickets();
+                    break;
+            }
+        } while (eleccionMenu != 0);
+
+    }
+
+    public static void mostrarMenu() {
+        System.out.println("0-Salir del programa");
+        System.out.println("1-Consultar peticiones");
+        System.out.println("2-Consultar tickets");
     }
 
     public static void loginAdmin(String rol) {
@@ -54,22 +80,6 @@ public class ModuloAdmin {
         System.out.println("El ticket ha sido generado con éxito.");
       /*
 
-        Peticion nuevaPeticion = new Peticion(
-                obtenerNuevoIdPeticion(),
-                idIngresada,
-                descripcion,
-                fecha,
-                idCategoria,
-                2, //harcodeado de forma provisional
-                2, //harcodeado de forma provisional
-                true
-        );
-
-        // Agrega la nueva petición al ArrayList de peticiones
-        peticiones.add(nuevaPeticion);
-
-        System.out.println("La petición ha sido generada con éxito.");
-*/
     }
 
     public static void modificarTicket() {
