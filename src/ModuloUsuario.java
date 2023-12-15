@@ -52,16 +52,16 @@ public class ModuloUsuario {
                     break;
                 case 2:
                     ArrayList<Peticion> peticionesUsuario = filtrarPeticionesPorUsuario(idIngresada);
-                    imprimirPeticiones(peticionesUsuario);
+                    Utilidades.imprimirPeticiones(peticionesUsuario, usuarios, categorias);
 
                     System.out.println("Introduzca el ID de la petición que quiere modificar: ");
-                    int indicePeticion = scanner.nextInt();
+                    int idPeticion = scanner.nextInt();
                     scanner.nextLine();
 
                     System.out.println("Introduzca la nueva descripción (se borrará la descripción anterior): ");
                     String nuevaDescripcion = scanner.nextLine();
 
-                    boolean descripcionCambiada = modificarDescripcion(indicePeticion, nuevaDescripcion);
+                    boolean descripcionCambiada = modificarDescripcion(idPeticion, nuevaDescripcion);
 
                     if (!descripcionCambiada) {
                         System.out.println("No tiene ninguna solicitud abierta con el ID de petición proporcionado: no se ha podido cambiar la descripción.");
@@ -80,12 +80,6 @@ public class ModuloUsuario {
     public static void mostrarUsuarios() {
         System.out.println("//Iniciar sesión con ID: " + usuarios.get(0).getId() + ", CONTRASEÑA: " + usuarios.get(0).getPassword());
         System.out.println();
-    }
-
-    public static void mostrarCategorias() {
-        for (Categoria categoria : categorias) {
-            System.out.println(categoria.getId() + " " + categoria.getCategoria());
-        }
     }
 
     public static void mostrarMenu() {
@@ -134,7 +128,7 @@ public class ModuloUsuario {
 
         String fecha = Fecha.ObtenerFechaActual();
 
-        mostrarCategorias();
+        Utilidades.imprimirCategorias(categorias);
         System.out.println("Ingrese el número de la categoría de la petición:");
         int idCategoria = Utilidades.inputNumerico();
 
@@ -162,7 +156,7 @@ public class ModuloUsuario {
     public static void consultarPeticion() {
         System.out.println("Introduce la Id de la peticion que deseas consultar: ");
         int idconsultarPeticion = Utilidades.inputNumerico();
-        Peticion PeticionConsultada = buscarPeticionPorId(idconsultarPeticion);
+        Peticion PeticionConsultada = Utilidades.buscarPeticionPorId(idconsultarPeticion, peticiones);
         Usuario usuarioActual = Utilidades.buscarUsuarioPorId(PeticionConsultada.getIdUsuario(), usuarios);
         Categoria categoria = Utilidades.buscarCategoriaPorId(PeticionConsultada.getIdCategoria(), categorias);
 
@@ -189,10 +183,10 @@ public class ModuloUsuario {
     }
 
 
-    public static boolean modificarDescripcion(int indicePeticion, String nuevaDescripcion) {
+    public static boolean modificarDescripcion(int idPeticion, String nuevaDescripcion) {
         boolean descripcionCambiada = false;
         for (int i = 0; i < peticiones.size(); i++) {
-            if (peticiones.get(i).getId() == indicePeticion) {
+            if (peticiones.get(i).getId() == idPeticion) {
                 peticiones.get(i).setDescripcion(nuevaDescripcion);
                 descripcionCambiada = true;
             }
@@ -209,24 +203,5 @@ public class ModuloUsuario {
             }
         }
         return peticionesUsuario;
-    }
-    public static Peticion buscarPeticionPorId(int id) {
-        for (Peticion peticion : peticiones) {
-            if (peticion.getId() == id) {
-                return peticion;
-            }
-        }
-        return null; // Devuelve null si no encuentra la petición con la ID dada
-    }
-    public static void imprimirPeticiones(ArrayList<Peticion> listaPeticiones) {
-        for (Peticion peticion : listaPeticiones) {
-            Usuario usuarioActual = Utilidades.buscarUsuarioPorId(peticion.getId(), usuarios);
-            Categoria categoria = Utilidades.buscarCategoriaPorId(peticion.getIdCategoria(), categorias);
-
-            System.out.println("ID: " + peticion.getId() + "\t|\tFecha: " + peticion.getFecha() + "\t|\tPor: " + usuarioActual.getNombre());
-            System.out.println("Categoría: " + categoria.getCategoria());
-            System.out.println("Descripción: " + peticion.getDescripcion());
-            System.out.println();
-        }
     }
 }

@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -24,7 +25,7 @@ public class Utilidades {
                 return usuario;
             }
         }
-        return null; // Devuelve null si no encuentra al usuario con la ID dada
+        return null;
     }
 
     public static Categoria buscarCategoriaPorId(int id, ArrayList<Categoria> categorias) {
@@ -33,7 +34,7 @@ public class Utilidades {
                 return categoria;
             }
         }
-        return null; // Devuelve null si no encuentra al usuario con la ID dada
+        return null;
     }
 
     public static Admin buscarAdminisPorId(int id, ArrayList<Admin> admins) {
@@ -42,6 +43,33 @@ public class Utilidades {
                 return admin;
             }
         }
-        return null; // Devuelve null si no encuentra al usuario con la ID dada
+        return null;
+    }
+
+    public static Peticion buscarPeticionPorId(int id, ArrayList<Peticion> peticiones) {
+        for (Peticion peticion : peticiones) {
+            if (peticion.getId() == id) {
+                return peticion;
+            }
+        }
+        return null;
+    }
+
+    public static void imprimirPeticiones(ArrayList<Peticion> p, ArrayList<Usuario> u, ArrayList<Categoria> c) {
+        for (Peticion peticion : p) {
+            Usuario usuarioActual = Utilidades.buscarUsuarioPorId(peticion.getId(), u);
+            Categoria categoria = Utilidades.buscarCategoriaPorId(peticion.getIdCategoria(), c);
+
+            System.out.println("ID: " + peticion.getId() + "\t|\tFecha: " + peticion.getFecha() + "\t|\tPor: " + usuarioActual.getNombre());
+            System.out.println("Categoría: " + categoria.getCategoria());
+            System.out.println("Descripción: " + peticion.getDescripcion());
+            System.out.println();
+        }
+    }
+
+    public static void imprimirCategorias(ArrayList<Categoria> c) {
+        for (Categoria categoria : c) {
+            System.out.println(categoria.getId() + " " + categoria.getCategoria());
+        }
     }
 }

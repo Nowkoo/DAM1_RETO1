@@ -34,7 +34,8 @@ public class ModuloAdmin {
                 System.out.println("El número introducido no es válido, por favor introduce otro número");
             }
             if (eleccionMenu == 0) {
-                guardarDatosPeticiones();
+                GestorDatos.guardarDatosPeticiones(peticiones);
+                GestorDatos.guardarDatosTickets(tickets);
             }
 
             switch (eleccionMenu) {
@@ -101,7 +102,51 @@ public class ModuloAdmin {
     }
 
     public static void consultarPeticiones() {
+        Utilidades.imprimirPeticiones(peticiones, usuarios, categorias);
+        menuPeticiones();
+    }
 
+    static void menuPeticiones() {
+        int option = 1;
+
+        while (option != 0) {
+            System.out.println("0: Salir\t1: Generar ticket\t2: Cambiar petición de categoría");
+            System.out.println("¿Qué acción desea realizar? ");
+            option = Utilidades.inputNumerico();
+            scanner.nextLine();
+
+            if (option == 1) {
+                generarTicket();
+
+            } else if (option == 2) {
+                System.out.println("Introduzca el ID de la petición que quiere cambiar de categoría: ");
+                int idPeticion = scanner.nextInt();
+                scanner.nextLine();
+
+                Utilidades.imprimirCategorias(categorias);
+                System.out.println("Introduzca el número de la categoría a la que quiere que pertenezca la petición: ");
+                int idNuevaCategoria = scanner.nextInt();
+                System.out.println(idPeticion);
+                System.out.println(idNuevaCategoria);
+                boolean modificada = modificarCategoria(idPeticion, idNuevaCategoria);
+                if(!modificada)
+                    System.out.println("No tiene ninguna solicitud abierta con el ID de petición proporcionado: no se ha podido cambiar la categoría.");
+
+            } else {
+                System.out.println("La opción seleccionada no existe.");
+            }
+        }
+    }
+
+    public static boolean modificarCategoria(int idPeticion, int idNuevaCategoria) {
+        boolean categoriaCambiada = false;
+        for (int i = 0; i < peticiones.size(); i++) {
+            if (peticiones.get(i).getId() == idPeticion) {
+                peticiones.get(i).setIdCategoria(idNuevaCategoria);
+                categoriaCambiada = true;
+            }
+        }
+        return categoriaCambiada;
     }
 
     public static void consultarTickets() {
@@ -134,47 +179,11 @@ public class ModuloAdmin {
 
     }
 
-    public static void modificarCategoriaPeticion() {
-
-    }
-
     public static void filtrarTicketPorTiempo() {
 
     }
 
     public static void filtrarTicketPorInventario() {
-
-    }
-
-    public static void cargarDatosUsuario() {
-
-    }
-
-    public static void cargarDatosPeticiones() {
-
-    }
-
-    public static void cargarDatosCategoria() {
-
-    }
-
-    public static void cargarDatosTecnicos() {
-
-    }
-
-    public static void cargarDatosAdmins() {
-
-    }
-
-    public static void cargarDatosTickets() {
-
-    }
-
-    public static void guardarDatosPeticiones() {
-
-    }
-
-    public static void guardarDatosTickets() {
 
     }
 }

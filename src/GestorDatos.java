@@ -112,7 +112,7 @@ public class GestorDatos {
 
     public static void guardarDatosTickets(ArrayList<Ticket> t) {
         try {
-            File peticionCSV = new File("./CSV/peticion.csv");
+            File peticionCSV = new File("./CSV/ticket.csv");
 
             PrintWriter f_sal = new PrintWriter(new FileWriter((peticionCSV), false), false);
             Ticket ticket;
