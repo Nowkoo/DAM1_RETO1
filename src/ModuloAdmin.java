@@ -78,7 +78,6 @@ public class ModuloAdmin {
                 "1");
         tickets.add(nuevoTicket);
         System.out.println("El ticket ha sido generado con éxito.");
-      /*
 
     }
 
