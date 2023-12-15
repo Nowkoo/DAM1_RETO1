@@ -1,14 +1,48 @@
 import java.util.ArrayList;
 
 public class ModuloAdmin {
-    private ArrayList usuarios;
-    private ArrayList peticiones;
-    private ArrayList categoria;
+    private static ArrayList usuarios;
+    private static ArrayList peticiones;
+    private static ArrayList categorias;
 
     private Usuario usuarioActual;
 
     public static void main(String[] args) {
+        usuarios = GestorDatos.cargarDatosUsuario(usuarios);
+        peticiones = GestorDatos.cargarDatosPeticiones(peticiones);
+        categorias = GestorDatos.cargarDatosCategorias(categorias);
 
+        int eleccionMenu;
+        String rol = "usuario";
+
+        do {
+
+            mostrarMenu();
+            eleccionMenu = ModuloUsuario.inputNumerico();
+
+            if (eleccionMenu < 0 || eleccionMenu > 3) {
+                System.out.println("El número introducido no es válido, por favor introduce otro número");
+            }
+            if (eleccionMenu == 0) {
+                guardarDatosPeticiones();
+            }
+
+            switch (eleccionMenu) {
+                case 1:
+                    consultarPeticiones();
+                    break;
+                case 2:
+                    consultarTickets();
+                    break;
+            }
+        } while (eleccionMenu != 0);
+
+    }
+
+    public static void mostrarMenu() {
+        System.out.println("0-Salir del programa");
+        System.out.println("1-Consultar peticiones");
+        System.out.println("2-Consultar tickets");
     }
 
     public static void loginAdmin(String rol) {
