@@ -6,6 +6,7 @@ import java.util.Scanner;
 public class ModuloAdmin {
     private static ArrayList<Usuario> usuarios = new ArrayList<>();
     private static ArrayList<Peticion> peticiones = new ArrayList<>();
+    private static ArrayList<Peticion> peticionesDelAdmin = new ArrayList<>();
     private static ArrayList<Categoria> categorias = new ArrayList<>();
     private static ArrayList<Admin> admins = new ArrayList<>();
     private static ArrayList<Ticket> tickets = new ArrayList<>();
@@ -26,10 +27,12 @@ public class ModuloAdmin {
         int eleccionMenu;
 
         do {
-            mostrarUsuarios();
             while (!loginExitoso) {
+                mostrarUsuarios();
                 identificarse();
             }
+
+            peticionesDelAdmin = Utilidades.filtrarPeticionesPorCategoria(usuarioEncontrado.getIdCategoria(), peticiones);
 
             mostrarMenu();
             eleccionMenu = Utilidades.inputNumerico();
@@ -113,8 +116,7 @@ public class ModuloAdmin {
     }
 
     public static void consultarPeticiones() {
-        ArrayList<Peticion> peticionesPorCategoria = Utilidades.filtrarPeticionesPorCategoria(usuarioEncontrado.getIdCategoria(), peticiones);
-        Utilidades.imprimirPeticiones(peticionesPorCategoria, usuarios, categorias);
+        Utilidades.imprimirPeticiones(peticionesDelAdmin, usuarios, categorias);
         menuPeticiones();
     }
 
@@ -128,7 +130,13 @@ public class ModuloAdmin {
             scanner.nextLine();
 
             if (option == 1) {
-                generarTicket();
+                System.out.println("Introduzca el ID de la petición a partir de la que quiere generar el ticket: ");
+                int idPeticion = Utilidades.inputNumerico();
+                Peticion peticion = Utilidades.buscarPeticionPorId(idPeticion, peticionesDelAdmin);
+                if (peticion == null)
+                    System.out.println("El ID de petición indicado no es válido: no se ha podido generar el nuevo ticket.");
+                else
+                    generarTicket(idPeticion);
 
             } else if (option == 2) {
                 System.out.println("Introduzca el ID de la petición que quiere cambiar de categoría: ");
@@ -187,30 +195,31 @@ public class ModuloAdmin {
         }
     }
 
-    public static void generarTicket() {
+    public static void generarTicket(int idPeticion) {
         int id = generarIdTicket();
 
         Tecnico tecnico = elegirTecnico();
-
         if (tecnico == null) {
-            System.out.println("No existe ningún técnico con el ID proporcionado: no se puede cambiar el técnico del ticket.");
+            System.out.println("El técnico seleccionado no existe: no se ha podido generar el nuevo ticket.");
             return;
-        } else {
-            Ticket ticket = Utilidades.buscarTicketisPorId(id, tickets);
-            ticket.setIdTecnico(tecnico.getId());
         }
 
-        System.out.println("Ingrese la descripción de la tarea a realizar por el técnico: ");
+        DispositivoInventario dispositivo = elegirDispositivo();
+        if (dispositivo == null) {
+            System.out.println("El dispositivo seleccionado no existe: no se ha podido generar el nuevo ticket.");
+            return;
+        }
+
+        int urgencia = elegirUrgencia();
+        if (urgencia < 1) {
+            System.out.println("Valor inválido: no se ha podido generar el nuevo ticket.");
+            return;
+        }
+
+        System.out.println("Ingrese la descripción de la tarea que tiene que realizar el técnico: ");
         String descripcion = scanner.nextLine();
 
-        Ticket nuevoTicket = new Ticket(
-                id,
-                idIngresada,
-                tecnico.getId(),
-                1,
-                1,
-                "1",
-                "1");
+        Ticket nuevoTicket = new Ticket(id, idPeticion, idIngresada, tecnico.getId(), dispositivo.getId(), 1, urgencia, descripcion);
         tickets.add(nuevoTicket);
         System.out.println("El ticket ha sido generado con éxito.");
     }
@@ -225,6 +234,22 @@ public class ModuloAdmin {
         Utilidades.imprimirTecnicos(tecnicos);
         System.out.println("Introduzca el número del técnico que quiere asignar al ticket: ");
         return tecnico = Utilidades.buscarTecnicoisPorId(Utilidades.inputNumerico(), tecnicos);
+    }
+
+    public static DispositivoInventario elegirDispositivo() {
+        DispositivoInventario dispositivo;
+        System.out.println("DISPOSITIVOS:");
+        Utilidades.imprimirDispositivos(dispositivos);
+        System.out.println("Introduzca el número de dispositivo afectado: ");
+        return dispositivo = Utilidades.buscarDispositivoPorId(Utilidades.inputNumerico(), dispositivos);
+    }
+
+    public static int elegirUrgencia() {
+        System.out.println("Seleccione urgencia (1-5: 1 más alta, 5 más baja): ");
+        int urgencia = Utilidades.inputNumerico();
+        if(urgencia < 1 || urgencia > 5)
+            return -1;
+        return  urgencia;
     }
 
     public static void modificarTicket() {

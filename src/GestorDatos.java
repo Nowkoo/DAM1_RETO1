@@ -117,7 +117,7 @@ public class GestorDatos {
             fila = f_in.readLine();
             while (fila != null) {
                 String[] atributo = fila.split(",");
-                t.add(new Ticket((Integer.parseInt(atributo[0])),Integer.parseInt(atributo[1]),Integer.parseInt(atributo[2]), Integer.parseInt(atributo[3]), Integer.parseInt(atributo[4]), atributo[5], atributo[6]));
+                t.add(new Ticket((Integer.parseInt(atributo[0])), Integer.parseInt(atributo[1]), Integer.parseInt(atributo[2]),Integer.parseInt(atributo[3]), Integer.parseInt(atributo[4]), Integer.parseInt(atributo[5]), Integer.parseInt(atributo[6]), atributo[7]));
                 fila = f_in.readLine();
             }
             f_in.close();
@@ -154,11 +154,11 @@ public class GestorDatos {
             PrintWriter f_sal = new PrintWriter(new FileWriter((peticionCSV), false), false);
             Ticket ticket;
 
-            f_sal.println("idTicket,idAdministrador,idTecnico,idDispositivo,urgencia,estado,descripcionTarea");
+            f_sal.println("idTicket, idPeticion, idAdministrador,idTecnico,idDispositivo,urgencia,estado,descripcionTarea");
 
             for (int i = 0; i < t.size(); i++) {
                 ticket = t.get(i);
-                f_sal.println(ticket.getId() + "," + ticket.getIdAdmin() + "," + ticket.getIdTecnico() + "," + ticket.getIdDispositivos() + "," + ticket.getUrgencia() + "," + ticket.getEstado() + "," + ticket.getDescripcion());
+                f_sal.println(ticket.getId() + "," + ticket.getIdPeticion() + "," + ticket.getIdAdmin() + "," + ticket.getIdTecnico() + "," + ticket.getIdDispositivos() + "," + ticket.getUrgencia() + "," + ticket.getEstado() + "," + ticket.getDescripcion());
             }
             f_sal.close();
 

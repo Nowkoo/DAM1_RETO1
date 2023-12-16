@@ -122,8 +122,14 @@ public class Utilidades {
     }
 
     public static void imprimirTecnicos(ArrayList<Tecnico> t) {
-        for (Tecnico tecnicos : t) {
-            System.out.println(tecnicos.getId() + " " + tecnicos.getNombre());
+        for (Tecnico tecnico : t) {
+            System.out.println(tecnico.getId() + " " + tecnico.getNombre());
+        }
+    }
+
+    public static void imprimirDispositivos(ArrayList<DispositivoInventario> d) {
+        for (DispositivoInventario dispositivo : d) {
+            System.out.println(dispositivo.getId() + " " + dispositivo.getNombre() + " ubicado en " + dispositivo.getSala() + "con IP " + dispositivo.getIp());
         }
     }
 

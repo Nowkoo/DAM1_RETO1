@@ -29,9 +29,8 @@ public class ModuloUsuario {
         String rol = "usuario";
 
         do {
-
-            mostrarUsuarios();
             while (!loginExitoso) {
+                mostrarUsuarios();
                 identificarse(rol);
             }
 
@@ -55,8 +54,7 @@ public class ModuloUsuario {
                     Utilidades.imprimirPeticiones(peticionesUsuario, usuarios, categorias);
 
                     System.out.println("Introduzca el ID de la petición que quiere modificar: ");
-                    int idPeticion = scanner.nextInt();
-                    scanner.nextLine();
+                    int idPeticion = Utilidades.inputNumerico();
 
                     System.out.println("Introduzca la nueva descripción (se borrará la descripción anterior): ");
                     String nuevaDescripcion = scanner.nextLine();
