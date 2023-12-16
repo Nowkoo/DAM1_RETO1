@@ -124,7 +124,7 @@ public class ModuloAdmin {
         int option = 1;
 
         while (option != 0) {
-            System.out.println("0: Salir\t1: Generar ticket\t2: Cambiar petición de categoría");
+            System.out.println("0: Atrás\t1: Generar ticket\t2: Cambiar petición de categoría");
             System.out.println("¿Qué acción desea realizar? ");
             option = Utilidades.inputNumerico();
             scanner.nextLine();
@@ -152,6 +152,9 @@ public class ModuloAdmin {
                 if(!modificada)
                     System.out.println("No tiene ninguna solicitud abierta con el ID de petición proporcionado: no se ha podido cambiar la categoría.");
 
+            } else if (option == 0) {
+                return;
+
             } else {
                 System.out.println("La opción seleccionada no existe.");
             }
@@ -178,10 +181,9 @@ public class ModuloAdmin {
         int option = 1;
 
         while (option != 0) {
-            System.out.println("0: Salir\t1: Modificar un ticket\t2: Filtrar por técnicos asignados\tFiltrar por dispositivo afectado");
+            System.out.println("0: Atrás\t1: Modificar un ticket\t2: Filtrar por técnicos asignados\tFiltrar por dispositivo afectado");
             System.out.println("¿Qué acción desea realizar? ");
             option = Utilidades.inputNumerico();
-            scanner.nextLine();
 
             if (option == 1) {
                 modificarTicketMenu();
@@ -189,6 +191,8 @@ public class ModuloAdmin {
                 filtrarTicketPorTecnico();
             } else if (option == 3) {
                 filtrarTicketPorInventario();
+            } else if (option == 0) {
+                return;
             } else {
                 System.out.println("La opción seleccionada no existe.");
             }
@@ -266,12 +270,13 @@ public class ModuloAdmin {
             System.out.println("0: Atrás\t 1: Cambiar de técnico\t2: Modificar descripción de la tarea");
             System.out.println("¿Qué acción desea realizar? ");
             option = Utilidades.inputNumerico();
-            scanner.nextLine();
 
             if (option == 1) {
                 cambiarTecnico(ticket);
             } else if (option == 2) {
                 cambiarTarea(ticket);
+            } else if (option == 0){
+                return;
             } else {
                 System.out.println("La opción seleccionada no existe.");
             }
