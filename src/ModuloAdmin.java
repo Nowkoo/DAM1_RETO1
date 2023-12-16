@@ -276,7 +276,7 @@ public class ModuloAdmin {
                 case 2:
                     System.out.println("Introduce la nueva descripción: ");
                     String nuevaDescripcion = scanner.nextLine();
-                   //this.descripcion=nuevaDescripcion;
+                    //this.descripcion=nuevaDescripcion;
                     System.out.println("La descripción ha sido modificada a: " + nuevaDescripcion);
                     break;
             }
@@ -284,7 +284,7 @@ public class ModuloAdmin {
         System.out.println("El estado del ticket ha sido actualizado: ");
         //System.out.println("Ténico: " + this.nombre);
         //System.out.println("Descripción: "+ this.descripcion);
-        }
+    }
 
     //Permite modificar el técnico o la descripción del ticket.
     //Estaría bien que tuviera un pequeño menú donde de a elegir cuál de los dos campos queremos modificar.
