@@ -254,41 +254,36 @@ public class ModuloAdmin {
 
     public static void modificarTicket() {
         scanner.nextLine();
-        System.out.println("¿Quieres modificar el técnico del ticket o la descripción del ticket?");
-        System.out.println("1-Técnico");
-        System.out.println("2-Descripción");
+        System.out.println("0: Atrás\t1: Cambiar técnico\t 2: Cambiar descripción");
+        int eleccion;
 
-        int eleccionTecnicoDescripcion = scanner.nextInt();
         do {
-            if (eleccionTecnicoDescripcion < 0 || eleccionTecnicoDescripcion > 2) {
-                System.out.println("El número seleccionado es válido.");
-            }else {
-                System.out.println("Introduce otro número para que sea válido.");
-            }
+            eleccion = Utilidades.inputNumerico();
+            if (eleccion < 0 || eleccion > 2) {
+                System.out.println("La opción seleccionada no existe.");
 
-            switch (eleccionTecnicoDescripcion) {
-                case 1:
-                    System.out.println("Introduce el nuevo técnico: ");
-                    String nuevoTecnico = scanner.nextLine();
-                    //this.nombre= nuevoTecnico;
-                    System.out.println("El técnico ha sido modificado a: " + nuevoTecnico);
-                    break;
-                case 2:
-                    System.out.println("Introduce la nueva descripción: ");
-                    String nuevaDescripcion = scanner.nextLine();
-                    //this.descripcion=nuevaDescripcion;
-                    System.out.println("La descripción ha sido modificada a: " + nuevaDescripcion);
-                    break;
+                switch (eleccion) {
+                    case 1:
+                        Tecnico tecnico = elegirTecnico();
+
+                        if (tecnico == null) {
+                            System.out.println("No existe ningún técnico con el ID proporcionado: no se puede cambiar el técnico del ticket.");
+                        } else {
+                            //Ticket ticket = Utilidades.buscarTicketisPorId(id, tickets);
+                            ticket.setIdTecnico(tecnico.getId());
+                            System.out.println("El técnico ha sido modificado a: " + tecnico.getNombre());
+                        }
+                        break;
+                    case 2:
+                        System.out.println("Introduce la nueva descripción: ");
+                        String nuevaDescripcion = scanner.nextLine();
+                        //this.descripcion=nuevaDescripcion;
+                        System.out.println("La descripción ha sido modificada a: " + nuevaDescripcion);
+                        break;
+                }
             }
-        } while (eleccionTecnicoDescripcion!=0);
-        System.out.println("El estado del ticket ha sido actualizado: ");
-        //System.out.println("Ténico: " + this.nombre);
-        //System.out.println("Descripción: "+ this.descripcion);
+        } while (eleccion != 0);
     }
-
-    //Permite modificar el técnico o la descripción del ticket.
-    //Estaría bien que tuviera un pequeño menú donde de a elegir cuál de los dos campos queremos modificar.
-    //Ver modificarDescripcion() en el módulo de usuario como referencia.
 
     public static void filtrarTicketPorTecnico() {
         //Ver filtrarPeticionPorUsuario() como referencia (clase Utilidades).
