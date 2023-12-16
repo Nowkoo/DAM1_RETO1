@@ -158,7 +158,25 @@ public class ModuloAdmin {
     }
 
     public static void menuTickets() {
+        int option = 1;
 
+        while (option != 0) {
+            System.out.println("0: Salir\t1: Modificar un ticket\t2: Filtrar por técnicos asignados\tFiltrar por dispositivo afectado");
+            System.out.println("¿Qué acción desea realizar? ");
+            option = Utilidades.inputNumerico();
+            scanner.nextLine();
+
+            if (option == 1) {
+                modificarTicket();
+
+            } else if (option == 2) {
+                filtrarTicketPorTecnico();
+            } else if (option == 3) {
+                filtrarTicketPorInventario();
+            } else {
+                System.out.println("La opción seleccionada no existe.");
+            }
+        }
     }
 
     public static void generarTicket() {
@@ -184,14 +202,18 @@ public class ModuloAdmin {
     }
 
     public static void modificarTicket() {
-
+        //Permite modificar el técnico o la descripción del ticket.
+        //Estaría bien que tuviera un pequeño menú donde de a elegir cuál de los dos campos queremos modificar.
+        //Ver modificarDescripcion() en el módulo de usuario como referencia.
     }
 
-    public static void filtrarTicketPorTiempo() {
-
+    public static void filtrarTicketPorTecnico() {
+        //Ver filtrarPeticionPorUsuario() como referencia (clase Utilidades).
+        //Utilizar imprimirTickets() para imprimir el resultado (clase Utilidades).
     }
 
     public static void filtrarTicketPorInventario() {
-
+        //Ver filtrarPeticionPorUsuario() como referencia (clase Utilidades).
+        //Utilizar imprimirTickets() para imprimir el resultado (clase Utilidades).
     }
 }
