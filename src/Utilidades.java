@@ -19,6 +19,10 @@ public class Utilidades {
         return s.equals("true");
     }
 
+    public static void imprimirSeparador() {
+        System.out.println("-------------------------------------------");
+    }
+
     public static Usuario buscarUsuarioPorId(int id, ArrayList<Usuario> usuarios) {
         for (Usuario usuario : usuarios) {
             if (usuario.getId() == id) {

@@ -7,7 +7,7 @@ public class Fecha {
         LocalDateTime fechaActual = LocalDateTime.now();
 
 
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd.MM.yy");
         String fechaFormateada = fechaActual.format(formato);
 
         return fechaFormateada;

@@ -16,9 +16,7 @@ public class ModuloUsuario {
     static ArrayList<Usuario> usuarios = new ArrayList<>();
     static ArrayList<Categoria> categorias = new ArrayList<>();
     static ArrayList<Peticion> peticiones = new ArrayList<>();
-
-    //Método que he usado para recorrer el arraylist usuarios
-    //No es necesario pero podría mantenerse como una opción a la que puede acceder el admin
+    static ArrayList<Peticion> peticionesUsuario = new ArrayList<>();
 
     public static void main(String[] args) {
         usuarios = GestorDatos.cargarDatosUsuario(usuarios);
@@ -37,7 +35,7 @@ public class ModuloUsuario {
             mostrarMenu();
             eleccionMenu = Utilidades.inputNumerico();
 
-            if (eleccionMenu < 0 || eleccionMenu > 3) {
+            if (eleccionMenu < 0 || eleccionMenu > 4) {
                 System.out.println("El número introducido no es válido, por favor introduce otro número");
             }
             if (eleccionMenu == 0) {
@@ -50,7 +48,16 @@ public class ModuloUsuario {
                     System.out.println();
                     break;
                 case 2:
-                    ArrayList<Peticion> peticionesUsuario = Utilidades.filtrarPeticionesPorUsuario(idIngresada, peticiones);
+                    peticionesUsuario = Utilidades.filtrarPeticionesPorUsuario(idIngresada, peticiones);
+                    Utilidades.imprimirPeticiones(peticionesUsuario, usuarios, categorias);
+                    break;
+                case 3:
+                    consultarPeticionPorID();
+                    System.out.println();
+                    System.out.println();
+                    break;
+                case 4:
+                    peticionesUsuario = Utilidades.filtrarPeticionesPorUsuario(idIngresada, peticiones);
                     Utilidades.imprimirPeticiones(peticionesUsuario, usuarios, categorias);
 
                     System.out.println("Introduzca el ID de la petición que quiere modificar: ");
@@ -66,12 +73,8 @@ public class ModuloUsuario {
                     }
                     System.out.println();
                     break;
-                case 3:
-                    consultarPeticion();
-                    System.out.println();
-                    System.out.println();
-                    break;
             }
+
         } while (eleccionMenu != 0);
     }
 
@@ -83,8 +86,9 @@ public class ModuloUsuario {
     public static void mostrarMenu() {
         System.out.println("0-Salir del programa");
         System.out.println("1-Generar una petición");
-        System.out.println("2-Modificar la petición");
-        System.out.println("3-Consultar la petición");
+        System.out.println("2-Cosultar peticiones");
+        System.out.println("3-Buscar una petición por su ID");
+        System.out.println("4-Modificar una petición");
     }
 
     public static void identificarse(String rol) {
@@ -120,22 +124,23 @@ public class ModuloUsuario {
 
     public static void generarPeticion() {
         scanner.nextLine();
-
         System.out.println("Ingrese la descripción de la petición:");
         String descripcion = scanner.nextLine();
 
         String fecha = Fecha.ObtenerFechaActual();
 
-        Utilidades.imprimirCategorias(categorias);
-        System.out.println("Ingrese el número de la categoría de la petición:");
-        int idCategoria = Utilidades.inputNumerico();
+        Categoria categoria = elegirCategoria();
+        if (categoria == null) {
+            System.out.println("La categoría seleccionada no existe: no se ha podido generar la petición.");
+            return;
+        }
 
         Peticion nuevaPeticion = new Peticion(
                 obtenerNuevoIdPeticion(),
                 idIngresada,
                 descripcion,
                 fecha,
-                idCategoria,
+                categoria.getId(),
                 2, //harcodeado de forma provisional
                 false
         );
@@ -146,27 +151,38 @@ public class ModuloUsuario {
         System.out.println("La petición ha sido generada con éxito.");
     }
 
+    public static Categoria elegirCategoria() {
+        Categoria categoria;
+        System.out.println("CATEGORÍAS:");
+        Utilidades.imprimirCategorias(categorias);
+        System.out.println("Introduzca el número de categoría de la petición: ");
+        return categoria = Utilidades.buscarCategoriaPorId(Utilidades.inputNumerico(), categorias);
+    }
+
     public static int obtenerNuevoIdPeticion() {
         return peticiones.size() + 1;
     }
 
-    public static void consultarPeticion() {
-        System.out.println("Introduce la Id de la peticion que deseas consultar: ");
+    public static void consultarPeticionPorID() {
+        System.out.println("Introduzca el ID de la peticion que desea consultar: ");
         int idconsultarPeticion = Utilidades.inputNumerico();
-        Peticion PeticionConsultada = Utilidades.buscarPeticionPorId(idconsultarPeticion, peticiones);
-        Usuario usuarioActual = Utilidades.buscarUsuarioPorId(PeticionConsultada.getIdUsuario(), usuarios);
-        Categoria categoria = Utilidades.buscarCategoriaPorId(PeticionConsultada.getIdCategoria(), categorias);
+        peticionesUsuario = Utilidades.filtrarPeticionesPorUsuario(idIngresada, peticiones);
+        Peticion PeticionConsultada = Utilidades.buscarPeticionPorId(idconsultarPeticion, peticionesUsuario);
 
         if (PeticionConsultada != null){
-            System.out.println("Id:" +PeticionConsultada.getId());
-            System.out.println("Usuario: " + usuarioActual.getNombre());//usuarioActual es temporal, más adelante arreglarlo
+            Categoria categoria = Utilidades.buscarCategoriaPorId(PeticionConsultada.getIdCategoria(), categorias);
+
+            Utilidades.imprimirSeparador();
+            System.out.println("Id:" + PeticionConsultada.getId());
+            System.out.println("Usuario: " + usuarioEncontrado.getNombre());
             System.out.println("Categoria: " + categoria.getCategoria());
             System.out.println("Descripcion: " + PeticionConsultada.getDescripcion() );
             System.out.println("Fecha: " + PeticionConsultada.getFecha());
             System.out.println("Estado: " + Utilidades.estado(PeticionConsultada.getResuelta()));
+            Utilidades.imprimirSeparador();
 
         } else {
-            System.out.println("La Id introducida para mostrar la peticion es erronea.");
+            System.out.println("El ID introducido para mostrar la petición es erróneo.");
         }
     }
 

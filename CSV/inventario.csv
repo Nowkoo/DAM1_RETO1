@@ -3,11 +3,11 @@ idDispositivo,nombreDispositivo,sala,IP
 2,Switch Sala Ordenadores,Sala Ordenadores,192.168.2.1
 3,Servidor0,Sala Ordenadores,192.168.2.10
 4,Switch Administracion,Administracion,192.168.1.2
-20,PC0,Sala Ordenadores,192.168.2.10
-21,PC1,Sala Ordenadores,192.168.2.11
-22,PC2,Sala Ordenadores,192.168.2.12
-23,PC3,Sala Ordenadores,192.168.2.13
-24,PC4,Sala Ordenadores,192.168.2.14
-25,PC5,Sala Ordenadores,192.168.2.15
-26,PC6,Sala Ordenadores,192.168.2.16
-27,PC7,Sala Ordenadores,192.168.2.17
+5,PC0,Sala Ordenadores,192.168.2.10
+6,PC1,Sala Ordenadores,192.168.2.11
+7,PC2,Sala Ordenadores,192.168.2.12
+8,PC3,Sala Ordenadores,192.168.2.13
+9,PC4,Sala Ordenadores,192.168.2.14
+10,PC5,Sala Ordenadores,192.168.2.15
+11,PC6,Sala Ordenadores,192.168.2.16
+12,PC7,Sala Ordenadores,192.168.2.17
