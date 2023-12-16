@@ -158,7 +158,7 @@ public class GestorDatos {
 
             for (int i = 0; i < t.size(); i++) {
                 ticket = t.get(i);
-                f_sal.println(ticket.getId() + "," + ticket.getId() + "," + ticket.getIdAdmin() + "," + ticket.getIdTecnico() + "," + ticket.getIdDispositivos() + "," + ticket.getUrgencia() + "," + ticket.getEstado() + "," + ticket.getDescripcion());
+                f_sal.println(ticket.getId() + "," + ticket.getIdAdmin() + "," + ticket.getIdTecnico() + "," + ticket.getIdDispositivos() + "," + ticket.getUrgencia() + "," + ticket.getEstado() + "," + ticket.getDescripcion());
             }
             f_sal.close();
 
