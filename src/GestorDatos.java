@@ -28,7 +28,7 @@ public class GestorDatos {
 
             while (linea != null) {
                 String[] palabras = linea.split(",");
-                p.add(new Peticion((Integer.parseInt(palabras[0])), Integer.parseInt(palabras[1]), palabras[2], palabras[3], Integer.parseInt(palabras[4]), Integer.parseInt(palabras[5]), Integer.parseInt(palabras[6]), Utilidades.stringToBoolean(palabras[7])));
+                p.add(new Peticion((Integer.parseInt(palabras[0])), Integer.parseInt(palabras[1]), palabras[2], palabras[3], Integer.parseInt(palabras[4]), Integer.parseInt(palabras[5]), Utilidades.stringToBoolean(palabras[6])));
                 linea = f_ent.readLine();
             }
             f_ent.close();
@@ -117,7 +117,7 @@ public class GestorDatos {
             fila = f_in.readLine();
             while (fila != null) {
                 String[] atributo = fila.split(",");
-                t.add(new Ticket((Integer.parseInt(atributo[0])), Integer.parseInt(atributo[1]), Integer.parseInt(atributo[2]),Integer.parseInt(atributo[3]), Integer.parseInt(atributo[4]), Integer.parseInt(atributo[5]), Integer.parseInt(atributo[6]), atributo[7]));
+                t.add(new Ticket((Integer.parseInt(atributo[0])), Integer.parseInt(atributo[1]), Integer.parseInt(atributo[2]),Integer.parseInt(atributo[3]), Integer.parseInt(atributo[4]), Integer.parseInt(atributo[5]), Utilidades.stringToBoolean(atributo[6]), atributo[7]));
                 fila = f_in.readLine();
             }
             f_in.close();
@@ -134,11 +134,11 @@ public class GestorDatos {
             PrintWriter f_sal = new PrintWriter(new FileWriter((peticionCSV), false), false);
             Peticion peticion;
 
-            f_sal.println("idPeticion,idUsuario,descripcion,fecha,idCategoria,idAdmin,estado,resuelta");
+            f_sal.println("idPeticion,idUsuario,descripcion,fecha,idCategoria,idAdmin,resuelta");
 
             for (int i = 0; i < p.size(); i++) {
                 peticion = p.get(i);
-                f_sal.println(peticion.getId() + "," + peticion.getIdUsuario() + "," + peticion.getDescripcion() + "," + peticion.getFecha() + "," + peticion.getIdCategoria() + "," + peticion.getIdAdmin() + "," + peticion.getEstado() + "," + peticion.getResuelta());
+                f_sal.println(peticion.getId() + "," + peticion.getIdUsuario() + "," + peticion.getDescripcion() + "," + peticion.getFecha() + "," + peticion.getIdCategoria() + "," + peticion.getIdAdmin() + "," + peticion.getResuelta());
             }
             f_sal.close();
 
@@ -154,11 +154,11 @@ public class GestorDatos {
             PrintWriter f_sal = new PrintWriter(new FileWriter((peticionCSV), false), false);
             Ticket ticket;
 
-            f_sal.println("idTicket, idPeticion, idAdministrador,idTecnico,idDispositivo,urgencia,estado,descripcionTarea");
+            f_sal.println("idTicket, idPeticion, idAdministrador,idTecnico,idDispositivo,urgencia,resuelto,descripcionTarea");
 
             for (int i = 0; i < t.size(); i++) {
                 ticket = t.get(i);
-                f_sal.println(ticket.getId() + "," + ticket.getIdPeticion() + "," + ticket.getIdAdmin() + "," + ticket.getIdTecnico() + "," + ticket.getIdDispositivos() + "," + ticket.getUrgencia() + "," + ticket.getEstado() + "," + ticket.getDescripcion());
+                f_sal.println(ticket.getId() + "," + ticket.getIdPeticion() + "," + ticket.getIdAdmin() + "," + ticket.getIdTecnico() + "," + ticket.getIdDispositivos() + "," + ticket.getUrgencia() + "," + ticket.getResuelto() + "," + ticket.getDescripcion());
             }
             f_sal.close();
 

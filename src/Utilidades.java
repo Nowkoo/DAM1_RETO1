@@ -87,11 +87,17 @@ public class Utilidades {
             Usuario usuarioActual = Utilidades.buscarUsuarioPorId(peticion.getIdUsuario(), u);
             Categoria categoria = Utilidades.buscarCategoriaPorId(peticion.getIdCategoria(), c);
 
-            System.out.println("ID: " + peticion.getId() + "\t|\tFecha: " + peticion.getFecha() + "\t|\tPor: " + usuarioActual.getNombre());
+            System.out.println("ID: " + peticion.getId() + "\t|\tFecha: " + peticion.getFecha() + "\t|\tEstado: " + estado(peticion.getResuelta()) + "\t|\tPor: " + usuarioActual.getNombre());
             System.out.println("Categoría: " + categoria.getCategoria());
             System.out.println("Descripción: " + peticion.getDescripcion());
             System.out.println();
         }
+    }
+
+    public static String estado(boolean resuelta) {
+        if (resuelta)
+            return "Resuelta";
+        return "Pendiente";
     }
 
     public static void imprimirTickets(ArrayList<Ticket> t, ArrayList<Tecnico> tec, ArrayList<DispositivoInventario> d) {
@@ -99,7 +105,7 @@ public class Utilidades {
             Tecnico tecnico = Utilidades.buscarTecnicoPorId(ticket.getIdTecnico(), tec);
             DispositivoInventario dispositivo = Utilidades.buscarDispositivoPorId(ticket.getIdDispositivos(), d);
 
-            System.out.println("ID: " + ticket.getId() + "\t|\tUrgencia: " + ticket.getUrgencia() + "\t|\tEstado: " + ticket.getEstado() + "\t|\tTécnico asignado: " + tecnico.getNombre());
+            System.out.println("ID: " + ticket.getId() + "\t|\tUrgencia: " + ticket.getUrgencia() + "\t|\tEstado: " + estado(ticket.getResuelto()) + "\t|\tTécnico asignado: " + tecnico.getNombre());
             System.out.println("Dispositivo afectado: " + dispositivo.getNombre() + " ubicado en " + dispositivo.getSala() + " con IP " + dispositivo.getIp());
             System.out.println("Tarea a realizar: " + ticket.getDescripcion());
             System.out.println();

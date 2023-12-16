@@ -5,16 +5,17 @@ public class Peticion {
     private String fecha;
     private int idCategoria;
     private int idAdmin;
-    private int estado;
     private boolean resuelta;
 
 
-    Peticion(int id, int idUsuario, String descripcion, String fecha, int idCategoria, int idAdmin, int estado, boolean resuelta) {
+    Peticion(int id, int idUsuario, String descripcion, String fecha, int idCategoria, int idAdmin, boolean resuelta) {
         this.id = id;
         this.idUsuario = idUsuario;
         this.descripcion = descripcion;
         this.fecha = fecha;
         this.idCategoria = idCategoria;
+        this.idAdmin = idAdmin;
+        this.resuelta = resuelta;
     }
 
     public int getId() {
@@ -39,10 +40,6 @@ public class Peticion {
 
     public int getIdAdmin() {
         return idAdmin;
-    }
-
-    public int getEstado() {
-        return estado;
     }
 
     public boolean getResuelta() {
@@ -71,10 +68,6 @@ public class Peticion {
 
     public void setIdAdmin(int idAdmin) {
         this.idAdmin = idAdmin;
-    }
-
-    public void setEstado(int estado) {
-        this.estado = estado;
     }
 
     public void setResuelta(boolean resuelta) {

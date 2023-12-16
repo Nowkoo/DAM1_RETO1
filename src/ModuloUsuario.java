@@ -137,8 +137,7 @@ public class ModuloUsuario {
                 fecha,
                 idCategoria,
                 2, //harcodeado de forma provisional
-                2, //harcodeado de forma provisional
-                true
+                false
         );
 
         // Agrega la nueva petición al ArrayList de peticiones
@@ -164,22 +163,12 @@ public class ModuloUsuario {
             System.out.println("Categoria: " + categoria.getCategoria());
             System.out.println("Descripcion: " + PeticionConsultada.getDescripcion() );
             System.out.println("Fecha: " + PeticionConsultada.getFecha());
-            System.out.println("Estado: " + PeticionConsultada.getResuelta());
+            System.out.println("Estado: " + Utilidades.estado(PeticionConsultada.getResuelta()));
 
         } else {
             System.out.println("La Id introducida para mostrar la peticion es erronea.");
         }
     }
-    public static void mostrarPeticion(Peticion peticion){
-        Usuario usuarioActual= Utilidades.buscarUsuarioPorId(peticion.getIdUsuario(), usuarios);
-        Categoria categoria = Utilidades.buscarCategoriaPorId(peticion.getIdCategoria(), categorias);
-        System.out.println("Id: " +peticion.getId());
-        System.out.println("Categoria: " + categoria.getCategoria());
-        System.out.println("Descripcio: " + peticion.getDescripcion());
-        System.out.println("Fecha: " + peticion.getFecha());
-        System.out.println("Estado: " + peticion.getEstado());
-    }
-
 
     public static boolean modificarDescripcion(int idPeticion, String nuevaDescripcion) {
         boolean descripcionCambiada = false;

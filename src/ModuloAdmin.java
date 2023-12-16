@@ -219,7 +219,7 @@ public class ModuloAdmin {
         System.out.println("Ingrese la descripción de la tarea que tiene que realizar el técnico: ");
         String descripcion = scanner.nextLine();
 
-        Ticket nuevoTicket = new Ticket(id, idPeticion, idIngresada, tecnico.getId(), dispositivo.getId(), 1, urgencia, descripcion);
+        Ticket nuevoTicket = new Ticket(id, idPeticion, idIngresada, tecnico.getId(), dispositivo.getId(), urgencia, false, descripcion);
         tickets.add(nuevoTicket);
         System.out.println("El ticket ha sido generado con éxito.");
     }

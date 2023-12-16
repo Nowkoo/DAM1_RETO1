@@ -5,18 +5,18 @@ public class Ticket {
     private int idAdmin;
     private int idTecnico;
     private int idDispositivos;
-    private int estado;
+    private boolean resuelto;
     private int urgencia;
     private String descripcion;
 
-    Ticket(int id, int idPeticion, int idAdmin, int idTecnico, int idDispositivos, int estado, int urgencia, String descripcion) {
+    Ticket(int id, int idPeticion, int idAdmin, int idTecnico, int idDispositivos, int urgencia, boolean resuelto, String descripcion) {
 
         this.id = id;
         this.idPeticion = idAdmin;
         this.idAdmin = idAdmin;
         this.idTecnico = idTecnico;
         this.idDispositivos = idDispositivos;
-        this.estado = estado;
+        this.resuelto = resuelto;
         this.urgencia = urgencia;
         this.descripcion = descripcion;
     }
@@ -61,12 +61,12 @@ public class Ticket {
         this.idDispositivos = idDispositivos;
     }
 
-    public int getEstado() {
-        return estado;
+    public boolean getResuelto() {
+        return resuelto;
     }
 
-    public void setEstado(int estado) {
-        this.estado = estado;
+    public void setResuelto(boolean resuelto) {
+        this.resuelto = resuelto;
     }
 
     public int getUrgencia() {
