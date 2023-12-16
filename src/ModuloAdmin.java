@@ -228,10 +228,42 @@ public class ModuloAdmin {
     }
 
     public static void modificarTicket() {
-        //Permite modificar el técnico o la descripción del ticket.
-        //Estaría bien que tuviera un pequeño menú donde de a elegir cuál de los dos campos queremos modificar.
-        //Ver modificarDescripcion() en el módulo de usuario como referencia.
-    }
+        scanner.nextLine();
+        System.out.println("¿Quieres modificar el técnico del ticket o la descripción del ticket?");
+        System.out.println("1-Técnico");
+        System.out.println("2-Descripción");
+
+        int eleccionTecnicoDescripcion = scanner.nextInt();
+        do {
+            if (eleccionTecnicoDescripcion < 0 || eleccionTecnicoDescripcion > 2) {
+                System.out.println("El número seleccionado es válido.");
+            }else {
+                System.out.println("Introduce otro número para que sea válido.");
+            }
+
+            switch (eleccionTecnicoDescripcion) {
+                case 1:
+                    System.out.println("Introduce el nuevo técnico: ");
+                    String nuevoTecnico = scanner.nextLine();
+                    //this.nombre= nuevoTecnico;
+                    System.out.println("El técnico ha sido modificado a: " + nuevoTecnico);
+                    break;
+                case 2:
+                    System.out.println("Introduce la nueva descripción: ");
+                    String nuevaDescripcion = scanner.nextLine();
+                   //this.descripcion=nuevaDescripcion;
+                    System.out.println("La descripción ha sido modificada a: " + nuevaDescripcion);
+                    break;
+            }
+        } while (eleccionTecnicoDescripcion!=0);
+        System.out.println("El estado del ticket ha sido actualizado: ");
+        //System.out.println("Ténico: " + this.nombre);
+        //System.out.println("Descripción: "+ this.descripcion);
+        }
+
+    //Permite modificar el técnico o la descripción del ticket.
+    //Estaría bien que tuviera un pequeño menú donde de a elegir cuál de los dos campos queremos modificar.
+    //Ver modificarDescripcion() en el módulo de usuario como referencia.
 
     public static void filtrarTicketPorTecnico() {
         //Ver filtrarPeticionPorUsuario() como referencia (clase Utilidades).
