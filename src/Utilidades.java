@@ -9,6 +9,7 @@ public class Utilidades {
         int input;
         try {
             input = scanner.nextInt();
+            scanner.nextLine();
         } catch (InputMismatchException e) {
             input = -10;
         }

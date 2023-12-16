@@ -184,7 +184,7 @@ public class ModuloAdmin {
             scanner.nextLine();
 
             if (option == 1) {
-                modificarTicket();
+                modificarTicketMenu();
             } else if (option == 2) {
                 filtrarTicketPorTecnico();
             } else if (option == 3) {
@@ -252,37 +252,47 @@ public class ModuloAdmin {
         return  urgencia;
     }
 
-    public static void modificarTicket() {
-        scanner.nextLine();
-        System.out.println("0: Atrás\t1: Cambiar técnico\t 2: Cambiar descripción");
-        int eleccion;
+    public static void modificarTicketMenu() {
+        System.out.println("Introduzca el ID del ticket que quiere modificar: ");
+        int idTicket = Utilidades.inputNumerico();
+        Ticket ticket = Utilidades.buscarTicketPorId(idTicket, tickets);
+        if (ticket == null) {
+            System.out.println("El ID introducido no es válido.");
+            return;
+        }
 
-        do {
-            eleccion = Utilidades.inputNumerico();
-            if (eleccion < 0 || eleccion > 2) {
+        int option = 1;
+        while (option != 0) {
+            System.out.println("0: Atrás\t 1: Cambiar de técnico\t2: Modificar descripción de la tarea");
+            System.out.println("¿Qué acción desea realizar? ");
+            option = Utilidades.inputNumerico();
+            scanner.nextLine();
+
+            if (option == 1) {
+                cambiarTecnico(ticket);
+            } else if (option == 2) {
+                cambiarTarea(ticket);
+            } else {
                 System.out.println("La opción seleccionada no existe.");
-
-                switch (eleccion) {
-                    case 1:
-                        Tecnico tecnico = elegirTecnico();
-
-                        if (tecnico == null) {
-                            System.out.println("No existe ningún técnico con el ID proporcionado: no se puede cambiar el técnico del ticket.");
-                        } else {
-                            //Ticket ticket = Utilidades.buscarTicketisPorId(id, tickets);
-                            ticket.setIdTecnico(tecnico.getId());
-                            System.out.println("El técnico ha sido modificado a: " + tecnico.getNombre());
-                        }
-                        break;
-                    case 2:
-                        System.out.println("Introduce la nueva descripción: ");
-                        String nuevaDescripcion = scanner.nextLine();
-                        //this.descripcion=nuevaDescripcion;
-                        System.out.println("La descripción ha sido modificada a: " + nuevaDescripcion);
-                        break;
-                }
             }
-        } while (eleccion != 0);
+        }
+    }
+
+    public static void cambiarTecnico(Ticket ticket) {
+        Tecnico tecnico = elegirTecnico();
+        if (tecnico == null) {
+            System.out.println("El técnico seleccionado no existe: no se ha podido modificar el técnico del ticket.");
+            return;
+        }
+        ticket.setIdTecnico(tecnico.getId());
+        System.out.println("El técnico del ticket " + ticket.getId() + " es ahora " + tecnico.getNombre() + ".");
+    }
+
+    public static void cambiarTarea(Ticket ticket){
+        System.out.println("Introduzca la descripción de la nueva tarea: ");
+        String nuevaTarea = scanner.nextLine();
+        ticket.setDescripcion(nuevaTarea);
+        System.out.println("La descripción ha sido cambiada con éxito");
     }
 
     public static void filtrarTicketPorTecnico() {
