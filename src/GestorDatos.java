@@ -73,6 +73,43 @@ public class GestorDatos {
         }
         return a;
     }
+
+    public static ArrayList<Tecnico> cargarDatosTecnicos(ArrayList<Tecnico> t) {
+        try {
+            BufferedReader f_in = new BufferedReader(new FileReader(new File("./CSV/tecnico.csv")));
+            String fila = f_in.readLine();
+            fila = f_in.readLine();
+            while (fila != null) {
+                String[] atributo = fila.split(",");
+                t.add(new Tecnico((Integer.parseInt(atributo[0])),atributo[1],atributo[2]));
+                fila = f_in.readLine();
+
+            }
+            f_in.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+        return t;
+    }
+
+    public static ArrayList<DispositivoInventario> cargarDatosDispositivos(ArrayList<DispositivoInventario> d) {
+        try {
+            BufferedReader f_in = new BufferedReader(new FileReader(new File("./CSV/inventario.csv")));
+            String fila = f_in.readLine();
+            fila = f_in.readLine();
+            while (fila != null) {
+                String[] atributo = fila.split(",");
+                d.add(new DispositivoInventario((Integer.parseInt(atributo[0])),atributo[1],atributo[2], atributo[3]));
+                fila = f_in.readLine();
+
+            }
+            f_in.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+        return d;
+    }
+
     public static ArrayList<Ticket> cargarDatosTickets(ArrayList<Ticket> t) {
         try {
             BufferedReader f_in = new BufferedReader(new FileReader(new File("./CSV/ticket.csv")));

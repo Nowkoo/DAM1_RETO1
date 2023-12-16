@@ -28,6 +28,24 @@ public class Utilidades {
         return null;
     }
 
+    public static Tecnico buscarTecnicoPorId(int id, ArrayList<Tecnico> tecnicos) {
+        for (Tecnico tecnico :  tecnicos) {
+            if (tecnico.getId() == id) {
+                return tecnico;
+            }
+        }
+        return null;
+    }
+
+    public static DispositivoInventario buscarDispositivoPorId(int id, ArrayList<DispositivoInventario> dispositivos) {
+        for (DispositivoInventario dispositivo : dispositivos) {
+            if (dispositivo.getId() == id) {
+                return dispositivo;
+            }
+        }
+        return null;
+    }
+
     public static Categoria buscarCategoriaPorId(int id, ArrayList<Categoria> categorias) {
         for (Categoria categoria : categorias) {
             if (categoria.getId() == id) {
@@ -57,12 +75,24 @@ public class Utilidades {
 
     public static void imprimirPeticiones(ArrayList<Peticion> p, ArrayList<Usuario> u, ArrayList<Categoria> c) {
         for (Peticion peticion : p) {
-            Usuario usuarioActual = Utilidades.buscarUsuarioPorId(peticion.getId(), u);
+            Usuario usuarioActual = Utilidades.buscarUsuarioPorId(peticion.getIdUsuario(), u);
             Categoria categoria = Utilidades.buscarCategoriaPorId(peticion.getIdCategoria(), c);
 
             System.out.println("ID: " + peticion.getId() + "\t|\tFecha: " + peticion.getFecha() + "\t|\tPor: " + usuarioActual.getNombre());
             System.out.println("Categoría: " + categoria.getCategoria());
             System.out.println("Descripción: " + peticion.getDescripcion());
+            System.out.println();
+        }
+    }
+
+    public static void imprimirTickets(ArrayList<Ticket> t, ArrayList<Tecnico> tec, ArrayList<DispositivoInventario> d) {
+        for (Ticket ticket : t) {
+            Tecnico tecnico = Utilidades.buscarTecnicoPorId(ticket.getIdTecnico(), tec);
+            DispositivoInventario dispositivo = Utilidades.buscarDispositivoPorId(ticket.getIdDispositivos(), d);
+
+            System.out.println("ID: " + ticket.getId() + "\t|\tUrgencia: " + ticket.getUrgencia() + "\t|\tEstado: " + ticket.getEstado() + "\t|\tTécnico asignado: " + tecnico.getNombre());
+            System.out.println("Dispositivo afectado: " + dispositivo.getNombre() + " ubicado en " + dispositivo.getSala() + " con IP " + dispositivo.getIp());
+            System.out.println("Tarea a realizar: " + ticket.getDescripcion());
             System.out.println();
         }
     }

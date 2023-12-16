@@ -8,6 +8,8 @@ public class ModuloAdmin {
     private static ArrayList<Admin> admins = new ArrayList<>();
     private static ArrayList<Ticket> tickets = new ArrayList<>();
     private static ArrayList<Tecnico> tecnicos = new ArrayList<>();
+    private static ArrayList<DispositivoInventario> dispositivos = new ArrayList<>();
+
 
     static Admin usuarioEncontrado;
     static boolean loginExitoso = false;
@@ -56,7 +58,8 @@ public class ModuloAdmin {
         categorias = GestorDatos.cargarDatosCategorias(categorias);
         admins = GestorDatos.cargarDatosAdmins(admins);
         tickets = GestorDatos.cargarDatosTickets(tickets);
-        //tecnicos = GestorDatos.cargarDatosTecnicos(tecnicos);
+        tecnicos = GestorDatos.cargarDatosTecnicos(tecnicos);
+        dispositivos = GestorDatos.cargarDatosDispositivos(dispositivos);
     }
 
     public static void mostrarMenu() {
@@ -150,6 +153,11 @@ public class ModuloAdmin {
     }
 
     public static void consultarTickets() {
+        Utilidades.imprimirTickets(tickets, tecnicos, dispositivos);
+        menuTickets();
+    }
+
+    public static void menuTickets() {
 
     }
 
