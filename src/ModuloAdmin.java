@@ -301,12 +301,46 @@ public class ModuloAdmin {
     }
 
     public static void filtrarTicketPorTecnico() {
-        //Ver filtrarPeticionPorUsuario() como referencia (clase Utilidades).
-        //Utilizar imprimirTickets() para imprimir el resultado (clase Utilidades).
+        System.out.println("Lista de Técnicos:");
+        Utilidades.imprimirTecnicos(tecnicos);
+
+        System.out.println("Introduzca el número del técnico para filtrar los tickets: ");
+        int idTecnico = Utilidades.inputNumerico();
+
+        ArrayList<Ticket> ticketsFiltrados = new ArrayList<>();
+
+        for (Ticket ticket : tickets) {
+            if (ticket.getIdTecnico() == idTecnico) {
+                ticketsFiltrados.add(ticket);
+            }
+        }
+
+        if (ticketsFiltrados.isEmpty()) {
+            System.out.println("No hay tickets asignados al técnico con ID: " + idTecnico);
+        } else {
+            Utilidades.imprimirTickets(ticketsFiltrados, tecnicos, dispositivos);
+        }
     }
 
     public static void filtrarTicketPorInventario() {
-        //Ver filtrarPeticionPorUsuario() como referencia (clase Utilidades).
-        //Utilizar imprimirTickets() para imprimir el resultado (clase Utilidades).
+        System.out.println("Lista de Dispositivos:");
+        Utilidades.imprimirDispositivos(dispositivos);
+
+        System.out.println("Introduzca el número del dispositivo para filtrar los tickets: ");
+        int idDispositivo = Utilidades.inputNumerico();
+
+        ArrayList<Ticket> ticketsFiltrados = new ArrayList<>();
+
+        for (Ticket ticket : tickets) {
+            if (ticket.getIdDispositivos() == idDispositivo) {
+                ticketsFiltrados.add(ticket);
+            }
+        }
+
+        if (ticketsFiltrados.isEmpty()) {
+            System.out.println("No hay tickets asociados al dispositivo con ID: " + idDispositivo);
+        } else {
+            Utilidades.imprimirTickets(ticketsFiltrados, tecnicos, dispositivos);
+        }
     }
 }
