@@ -64,6 +64,24 @@ public class Utilidades {
         return null;
     }
 
+    public static Tecnico buscarTecnicoisPorId(int id, ArrayList<Tecnico> tecnicos) {
+        for (Tecnico tecnico : tecnicos) {
+            if (tecnico.getId() == id) {
+                return tecnico;
+            }
+        }
+        return null;
+    }
+
+    public static Ticket buscarTicketisPorId(int id, ArrayList<Ticket> tickets) {
+        for (Ticket ticket : tickets) {
+            if (ticket.getId() == id) {
+                return ticket;
+            }
+        }
+        return null;
+    }
+
     public static Peticion buscarPeticionPorId(int id, ArrayList<Peticion> peticiones) {
         for (Peticion peticion : peticiones) {
             if (peticion.getId() == id) {
@@ -101,5 +119,33 @@ public class Utilidades {
         for (Categoria categoria : c) {
             System.out.println(categoria.getId() + " " + categoria.getCategoria());
         }
+    }
+
+    public static void imprimirTecnicos(ArrayList<Tecnico> t) {
+        for (Tecnico tecnicos : t) {
+            System.out.println(tecnicos.getId() + " " + tecnicos.getNombre());
+        }
+    }
+
+    public static ArrayList<Peticion> filtrarPeticionesPorUsuario(int idUsuario, ArrayList<Peticion> peticiones) {
+        ArrayList<Peticion> peticionesUsuario = new ArrayList<>();
+
+        for (int i = 0; i < peticiones.size(); i++) {
+            if (idUsuario == peticiones.get(i).getIdUsuario()) {
+                peticionesUsuario.add(peticiones.get(i));
+            }
+        }
+        return peticionesUsuario;
+    }
+
+    public static ArrayList<Peticion> filtrarPeticionesPorCategoria(int idCategoria, ArrayList<Peticion> peticiones) {
+        ArrayList<Peticion> peticionesCategoria = new ArrayList<>();
+
+        for (int i = 0; i < peticiones.size(); i++) {
+            if (idCategoria == peticiones.get(i).getIdCategoria()) {
+                peticionesCategoria.add(peticiones.get(i));
+            }
+        }
+        return peticionesCategoria;
     }
 }

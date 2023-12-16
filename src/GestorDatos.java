@@ -63,7 +63,7 @@ public class GestorDatos {
             fila = f_in.readLine();
             while (fila != null) {
                 String[] atributo = fila.split(",");
-                a.add(new Admin((Integer.parseInt(atributo[0])),atributo[1],atributo[2]));
+                a.add(new Admin((Integer.parseInt(atributo[0])),atributo[1],atributo[2], (Integer.parseInt(atributo[3]))));
                 fila = f_in.readLine();
 
             }

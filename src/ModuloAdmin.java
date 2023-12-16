@@ -1,3 +1,5 @@
+import java.awt.image.AreaAveragingScaleFilter;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -100,12 +102,19 @@ public class ModuloAdmin {
     }
 
     public static void mostrarUsuarios() {
-        System.out.println("//Iniciar sesión con ID: " + admins.get(0).getId() + ", CONTRASEÑA: " + admins.get(0).getPassword());
+        Categoria categoria;
+        System.out.println("//Cuentas de administradores: ");
+        for (Admin admin : admins) {
+            categoria = Utilidades.buscarCategoriaPorId(admin.getIdCategoria(), categorias);
+            System.out.println("ID: " + admin.getId() + ", PW: " + admin.getPassword() + ", GESTIONA: " + categoria.getCategoria());
+        }
+        //System.out.println("//Iniciar sesión con ID: " + admins.get(0).getId() + ", CONTRASEÑA: " + admins.get(0).getPassword());
         System.out.println();
     }
 
     public static void consultarPeticiones() {
-        Utilidades.imprimirPeticiones(peticiones, usuarios, categorias);
+        ArrayList<Peticion> peticionesPorCategoria = Utilidades.filtrarPeticionesPorCategoria(usuarioEncontrado.getIdCategoria(), peticiones);
+        Utilidades.imprimirPeticiones(peticionesPorCategoria, usuarios, categorias);
         menuPeticiones();
     }
 
@@ -168,7 +177,6 @@ public class ModuloAdmin {
 
             if (option == 1) {
                 modificarTicket();
-
             } else if (option == 2) {
                 filtrarTicketPorTecnico();
             } else if (option == 3) {
@@ -180,25 +188,43 @@ public class ModuloAdmin {
     }
 
     public static void generarTicket() {
-        scanner.nextLine();
+        int id = generarIdTicket();
 
-        System.out.println("Ingrese la descripción de la tarea");
+        Tecnico tecnico = elegirTecnico();
+
+        if (tecnico == null) {
+            System.out.println("No existe ningún técnico con el ID proporcionado: no se puede cambiar el técnico del ticket.");
+            return;
+        } else {
+            Ticket ticket = Utilidades.buscarTicketisPorId(id, tickets);
+            ticket.setIdTecnico(tecnico.getId());
+        }
+
+        System.out.println("Ingrese la descripción de la tarea a realizar por el técnico: ");
         String descripcion = scanner.nextLine();
 
-
-        System.out.println("Ingrese la ID de la categoria de la peticion:");
-        int idCategoria = scanner.nextInt();
-
         Ticket nuevoTicket = new Ticket(
-                1,
-                1,
-                1,
+                id,
+                idIngresada,
+                tecnico.getId(),
                 1,
                 1,
                 "1",
                 "1");
         tickets.add(nuevoTicket);
         System.out.println("El ticket ha sido generado con éxito.");
+    }
+
+    public static int generarIdTicket() {
+        return tickets.get(tickets.size() - 1).getId() + 1;
+    }
+
+    public static Tecnico elegirTecnico() {
+        Tecnico tecnico;
+        System.out.println("TÉCNICOS:");
+        Utilidades.imprimirTecnicos(tecnicos);
+        System.out.println("Introduzca el número del técnico que quiere asignar al ticket: ");
+        return tecnico = Utilidades.buscarTecnicoisPorId(Utilidades.inputNumerico(), tecnicos);
     }
 
     public static void modificarTicket() {

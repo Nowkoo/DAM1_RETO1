@@ -51,7 +51,7 @@ public class ModuloUsuario {
                     System.out.println();
                     break;
                 case 2:
-                    ArrayList<Peticion> peticionesUsuario = filtrarPeticionesPorUsuario(idIngresada);
+                    ArrayList<Peticion> peticionesUsuario = Utilidades.filtrarPeticionesPorUsuario(idIngresada, peticiones);
                     Utilidades.imprimirPeticiones(peticionesUsuario, usuarios, categorias);
 
                     System.out.println("Introduzca el ID de la petición que quiere modificar: ");
@@ -192,16 +192,5 @@ public class ModuloUsuario {
             }
         }
         return descripcionCambiada;
-    }
-
-    public static ArrayList<Peticion> filtrarPeticionesPorUsuario(int idUsuario) {
-        ArrayList<Peticion> peticionesUsuario = new ArrayList<>();
-
-        for (int i = 0; i < peticiones.size(); i++) {
-            if (idUsuario == peticiones.get(i).getIdUsuario()) {
-                peticionesUsuario.add(peticiones.get(i));
-            }
-        }
-        return peticionesUsuario;
     }
 }

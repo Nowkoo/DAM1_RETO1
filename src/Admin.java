@@ -5,11 +5,14 @@ public class Admin {
 
     private String password;
 
-    Admin(int id, String nombre, String password) {
+    private int idCategoria;
+
+    Admin(int id, String nombre, String password, int idCategoria) {
 
         this.id = id;
         this.nombre = nombre;
         this.password = password;
+        this.idCategoria = idCategoria;
 
     }
 
@@ -35,5 +38,13 @@ public class Admin {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public int getIdCategoria() {
+        return idCategoria;
+    }
+
+    public void setIdCategoria(int idCategoria) {
+        this.idCategoria = idCategoria;
     }
 }
