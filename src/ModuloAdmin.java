@@ -17,7 +17,6 @@ public class ModuloAdmin {
     static Admin usuarioEncontrado;
     static boolean loginExitoso = false;
     static int idIngresada;
-    static String passwordIngresada;
     static Scanner scanner;
 
     public static void main(String[] args) {
@@ -29,7 +28,7 @@ public class ModuloAdmin {
         do {
             while (!loginExitoso) {
                 mostrarUsuarios();
-                identificarse();
+                loginAdmin();
             }
 
             peticionesDelAdmin = Utilidades.filtrarPeticionesPorCategoria(usuarioEncontrado.getIdCategoria(), peticiones);
@@ -73,35 +72,24 @@ public class ModuloAdmin {
         System.out.println("2-Consultar tickets");
     }
 
-    public static void identificarse() {
-        System.out.println("Ingresa tu ID de administrador");
+    public static void loginAdmin() {
+        System.out.println("Ingresa tu ID de admin");
         idIngresada = Utilidades.inputNumerico();
         usuarioEncontrado = Utilidades.buscarAdminPorId(idIngresada, admins);
-        pedirPassword();
-        validarPassword();
-    }
 
-    public static void pedirPassword() {
-        if (usuarioEncontrado != null) {
-            System.out.println("Ingresa tu contraseña");
-            passwordIngresada = scanner.next();
-        } else {
-            System.out.println("Usuario no encontrado.");
+        if(usuarioEncontrado == null) {
+            System.out.println("Usuario no encontrado");
+            return;
         }
-    }
 
-    public static void validarPassword() {
-        boolean usuarioNoEsNulo = usuarioEncontrado != null;
+        String passwordIngresada = Utilidades.pedirPassword();
+        boolean esCorrecta = Utilidades.validarPassword(passwordIngresada, usuarioEncontrado.getPassword());
 
-        if (usuarioNoEsNulo) {
-            boolean passwordCoincide = passwordIngresada.equals(usuarioEncontrado.getPassword());
-            if (passwordCoincide) {
-                System.out.println("\n¡Bienvenido, " + usuarioEncontrado.getNombre() + "! \uD83D\uDE00 \n");
-                loginExitoso = true;
-            } else {
-                System.out.println("Contraseña incorrecta.");
-            }
-        }
+        if (esCorrecta) {
+            System.out.println("\n¡Bienvenido, " + usuarioEncontrado.getNombre() + "! \uD83D\uDE00 \n");
+            loginExitoso = true;
+        } else
+            System.out.println("Contraseña incorrecta.");
     }
 
     public static void mostrarUsuarios() {
@@ -181,7 +169,7 @@ public class ModuloAdmin {
         int option = 1;
 
         while (option != 0) {
-            System.out.println("0: Atrás\t1: Modificar un ticket\t2: Filtrar por técnicos asignados\tFiltrar por dispositivo afectado");
+            System.out.println("0: Atrás\t1: Modificar un ticket\t2: Filtrar por técnicos asignados\t3: Filtrar por dispositivo afectado");
             System.out.println("¿Qué acción desea realizar? ");
             option = Utilidades.inputNumerico();
 

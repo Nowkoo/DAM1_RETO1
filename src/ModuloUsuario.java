@@ -10,7 +10,6 @@ public class ModuloUsuario {
     static Scanner scanner = new Scanner(System.in);
     static Usuario usuarioEncontrado;
     static int idIngresada;
-    static String passwordIngresada;
     static boolean loginExitoso = false;
 
     static ArrayList<Usuario> usuarios = new ArrayList<>();
@@ -29,7 +28,7 @@ public class ModuloUsuario {
         do {
             while (!loginExitoso) {
                 mostrarUsuarios();
-                identificarse(rol);
+                loginUsuario();
             }
 
             mostrarMenu();
@@ -50,6 +49,7 @@ public class ModuloUsuario {
                 case 2:
                     peticionesUsuario = Utilidades.filtrarPeticionesPorUsuario(idIngresada, peticiones);
                     Utilidades.imprimirPeticiones(peticionesUsuario, usuarios, categorias);
+                    Filtrar();
                     break;
                 case 3:
                     consultarPeticionPorID();
@@ -57,21 +57,7 @@ public class ModuloUsuario {
                     System.out.println();
                     break;
                 case 4:
-                    peticionesUsuario = Utilidades.filtrarPeticionesPorUsuario(idIngresada, peticiones);
-                    Utilidades.imprimirPeticiones(peticionesUsuario, usuarios, categorias);
-
-                    System.out.println("Introduzca el ID de la petición que quiere modificar: ");
-                    int idPeticion = Utilidades.inputNumerico();
-
-                    System.out.println("Introduzca la nueva descripción (se borrará la descripción anterior): ");
-                    String nuevaDescripcion = scanner.nextLine();
-
-                    boolean descripcionCambiada = modificarDescripcion(idPeticion, nuevaDescripcion);
-
-                    if (!descripcionCambiada) {
-                        System.out.println("No tiene ninguna solicitud abierta con el ID de petición proporcionado: no se ha podido cambiar la descripción.");
-                    }
-                    System.out.println();
+                    modificarPeticion();
                     break;
             }
 
@@ -86,40 +72,29 @@ public class ModuloUsuario {
     public static void mostrarMenu() {
         System.out.println("0-Salir del programa");
         System.out.println("1-Generar una petición");
-        System.out.println("2-Cosultar peticiones");
+        System.out.println("2-Consultar peticiones");
         System.out.println("3-Buscar una petición por su ID");
         System.out.println("4-Modificar una petición");
     }
 
-    public static void identificarse(String rol) {
-        System.out.println("Ingresa tu ID de " + rol);
+    public static void loginUsuario() {
+        System.out.println("Ingresa tu ID de usuario");
         idIngresada = Utilidades.inputNumerico();
         usuarioEncontrado = Utilidades.buscarUsuarioPorId(idIngresada, usuarios);
-        pedirPassword();
-        validarPassword();
-    }
 
-    public static void pedirPassword() {
-        if (usuarioEncontrado != null) {
-            System.out.println("Ingresa tu contraseña");
-            passwordIngresada = scanner.next();
-        } else {
-            System.out.println("Usuario no encontrado.");
+        if(usuarioEncontrado == null) {
+            System.out.println("Usuario no encontrado");
+            return;
         }
-    }
 
-    public static void validarPassword() {
-        boolean usuarioNoEsNulo = usuarioEncontrado != null;
+        String passwordIngresada = Utilidades.pedirPassword();
+        boolean esCorrecta = Utilidades.validarPassword(passwordIngresada, usuarioEncontrado.getPassword());
 
-        if (usuarioNoEsNulo) {
-            boolean passwordCoincide = passwordIngresada.equals(usuarioEncontrado.getPassword());
-            if (passwordCoincide) {
-                System.out.println("\n¡Bienvenido, " + usuarioEncontrado.getNombre() + "! \uD83D\uDE00 \n");
-                loginExitoso = true;
-            } else {
-                System.out.println("Contraseña incorrecta.");
-            }
-        }
+        if (esCorrecta) {
+            System.out.println("\n¡Bienvenido, " + usuarioEncontrado.getNombre() + "! \uD83D\uDE00 \n");
+            loginExitoso = true;
+        } else
+            System.out.println("Contraseña incorrecta.");
     }
 
     public static void generarPeticion() {
@@ -155,7 +130,7 @@ public class ModuloUsuario {
         Categoria categoria;
         System.out.println("CATEGORÍAS:");
         Utilidades.imprimirCategorias(categorias);
-        System.out.println("Introduzca el número de categoría de la petición: ");
+        System.out.println("Introduzca el número de categoría: ");
         return categoria = Utilidades.buscarCategoriaPorId(Utilidades.inputNumerico(), categorias);
     }
 
@@ -186,6 +161,24 @@ public class ModuloUsuario {
         }
     }
 
+    public static void modificarPeticion() {
+        peticionesUsuario = Utilidades.filtrarPeticionesPorUsuario(idIngresada, peticiones);
+        Utilidades.imprimirPeticiones(peticionesUsuario, usuarios, categorias);
+
+        System.out.println("Introduzca el ID de la petición que quiere modificar: ");
+        int idPeticion = Utilidades.inputNumerico();
+
+        System.out.println("Introduzca la nueva descripción (se borrará la descripción anterior): ");
+        String nuevaDescripcion = scanner.nextLine();
+
+        boolean descripcionCambiada = modificarDescripcion(idPeticion, nuevaDescripcion);
+
+        if (!descripcionCambiada) {
+            System.out.println("No tiene ninguna solicitud abierta con el ID de petición proporcionado: no se ha podido cambiar la descripción.");
+        }
+        System.out.println();
+    }
+
     public static boolean modificarDescripcion(int idPeticion, String nuevaDescripcion) {
         boolean descripcionCambiada = false;
         for (int i = 0; i < peticiones.size(); i++) {
@@ -195,5 +188,32 @@ public class ModuloUsuario {
             }
         }
         return descripcionCambiada;
+    }
+
+    public static void Filtrar() {
+        int option = 1;
+
+        while (option != 0) {
+            System.out.println("0: Atrás\t1: Filtrar categoría \t2: Filtrar sin resolver\t3: Filtrar resueltas");
+            System.out.println("¿Qué acción desea realizar? ");
+            option = Utilidades.inputNumerico();
+            ArrayList<Peticion> peticionesFiltradas;
+
+            if (option == 1) {
+                Categoria categoria = elegirCategoria();
+                peticionesFiltradas = Utilidades.filtrarPeticionesPorCategoria(categoria.getId(), peticiones);
+                Utilidades.imprimirPeticiones(peticionesFiltradas, usuarios, categorias);
+            } else if (option == 2) {
+                peticionesFiltradas = Utilidades.filtrarPeticionesPorEstado(false, peticiones);
+                Utilidades.imprimirPeticiones(peticionesFiltradas, usuarios, categorias);
+            } else if (option == 3) {
+                peticionesFiltradas = Utilidades.filtrarPeticionesPorEstado(true, peticiones);
+                Utilidades.imprimirPeticiones(peticionesFiltradas, usuarios, categorias);
+            } else if (option == 0) {
+                return;
+            } else {
+                System.out.println("La opción seleccionada no existe.");
+            }
+        }
     }
 }

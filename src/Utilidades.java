@@ -21,7 +21,17 @@ public class Utilidades {
     }
 
     public static void imprimirSeparador() {
-        System.out.println("-------------------------------------------");
+        System.out.println("------------------------------------------------------------------------------");
+    }
+
+    public static String pedirPassword() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Ingrese su contraseña");
+        return scanner.nextLine();
+    }
+
+    public static boolean validarPassword(String passwordIngresada, String passwordCorrecta) {
+        return passwordIngresada.equals(passwordCorrecta);
     }
 
     public static Usuario buscarUsuarioPorId(int id, ArrayList<Usuario> usuarios) {
@@ -89,12 +99,14 @@ public class Utilidades {
 
     public static void imprimirPeticiones(ArrayList<Peticion> p, ArrayList<Usuario> u, ArrayList<Categoria> c) {
         for (Peticion peticion : p) {
+            imprimirSeparador();
             Usuario usuarioActual = Utilidades.buscarUsuarioPorId(peticion.getIdUsuario(), u);
             Categoria categoria = Utilidades.buscarCategoriaPorId(peticion.getIdCategoria(), c);
 
             System.out.println("ID: " + peticion.getId() + "\t|\tFecha: " + peticion.getFecha() + "\t|\tEstado: " + estado(peticion.getResuelta()) + "\t|\tPor: " + usuarioActual.getNombre());
             System.out.println("Categoría: " + categoria.getCategoria());
             System.out.println("Descripción: " + peticion.getDescripcion());
+            imprimirSeparador();
             System.out.println();
         }
     }
@@ -107,12 +119,14 @@ public class Utilidades {
 
     public static void imprimirTickets(ArrayList<Ticket> t, ArrayList<Tecnico> tec, ArrayList<DispositivoInventario> d) {
         for (Ticket ticket : t) {
+            imprimirSeparador();
             Tecnico tecnico = Utilidades.buscarTecnicoPorId(ticket.getIdTecnico(), tec);
             DispositivoInventario dispositivo = Utilidades.buscarDispositivoPorId(ticket.getIdDispositivos(), d);
 
             System.out.println("ID: " + ticket.getId() + "\t|\tUrgencia: " + ticket.getUrgencia() + "\t|\tEstado: " + estado(ticket.getResuelto()) + "\t|\tTécnico asignado: " + tecnico.getNombre());
             System.out.println("Dispositivo afectado: " + dispositivo.getNombre() + " ubicado en " + dispositivo.getSala() + " con IP " + dispositivo.getIp());
             System.out.println("Tarea a realizar: " + ticket.getDescripcion());
+            imprimirSeparador();
             System.out.println();
         }
     }
@@ -155,5 +169,27 @@ public class Utilidades {
             }
         }
         return peticionesCategoria;
+    }
+
+    public static ArrayList<Peticion> filtrarPeticionesPorEstado(boolean resuelta, ArrayList<Peticion> peticiones) {
+        ArrayList<Peticion> peticionesEstado = new ArrayList<>();
+
+        for (int i = 0; i < peticiones.size(); i++) {
+            if (resuelta == peticiones.get(i).getResuelta()) {
+                peticionesEstado.add(peticiones.get(i));
+            }
+        }
+        return peticionesEstado;
+    }
+
+    public static ArrayList<Ticket> filtrarTicketsPorTecnico(int idTecnico, ArrayList<Ticket> tickets) {
+        ArrayList<Ticket> ticketsPorTecnico = new ArrayList<>();
+
+        for (int i = 0; i < tickets.size(); i++) {
+            if (idTecnico == tickets.get(i).getIdTecnico()) {
+                ticketsPorTecnico.add(tickets.get(i));
+            }
+        }
+        return ticketsPorTecnico;
     }
 }
