@@ -55,7 +55,7 @@ public class Utilidades {
         return null;
     }
 
-    public static Admin buscarAdminisPorId(int id, ArrayList<Admin> admins) {
+    public static Admin buscarAdminPorId(int id, ArrayList<Admin> admins) {
         for (Admin admin : admins) {
             if (admin.getId() == id) {
                 return admin;
@@ -64,16 +64,7 @@ public class Utilidades {
         return null;
     }
 
-    public static Tecnico buscarTecnicoisPorId(int id, ArrayList<Tecnico> tecnicos) {
-        for (Tecnico tecnico : tecnicos) {
-            if (tecnico.getId() == id) {
-                return tecnico;
-            }
-        }
-        return null;
-    }
-
-    public static Ticket buscarTicketisPorId(int id, ArrayList<Ticket> tickets) {
+    public static Ticket buscarTicketPorId(int id, ArrayList<Ticket> tickets) {
         for (Ticket ticket : tickets) {
             if (ticket.getId() == id) {
                 return ticket;

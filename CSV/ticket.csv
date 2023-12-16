@@ -1,3 +1,3 @@
 idTicket, idPeticion, idAdministrador,idTecnico,idDispositivo,urgencia,estado,descripcionTarea
 1,1,1,1,1,1,1,reparar o reemplazar
-2,1,1,1,27,5,1,arreglar YA!!
+2,1,1,1,27,1,5,arreglar YA!!

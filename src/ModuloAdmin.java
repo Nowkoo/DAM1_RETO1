@@ -76,7 +76,7 @@ public class ModuloAdmin {
     public static void identificarse() {
         System.out.println("Ingresa tu ID de administrador");
         idIngresada = Utilidades.inputNumerico();
-        usuarioEncontrado = Utilidades.buscarAdminisPorId(idIngresada, admins);
+        usuarioEncontrado = Utilidades.buscarAdminPorId(idIngresada, admins);
         pedirPassword();
         validarPassword();
     }
@@ -233,7 +233,7 @@ public class ModuloAdmin {
         System.out.println("TÉCNICOS:");
         Utilidades.imprimirTecnicos(tecnicos);
         System.out.println("Introduzca el número del técnico que quiere asignar al ticket: ");
-        return tecnico = Utilidades.buscarTecnicoisPorId(Utilidades.inputNumerico(), tecnicos);
+        return tecnico = Utilidades.buscarTecnicoPorId(Utilidades.inputNumerico(), tecnicos);
     }
 
     public static DispositivoInventario elegirDispositivo() {
