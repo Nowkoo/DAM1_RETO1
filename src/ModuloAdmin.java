@@ -296,11 +296,18 @@ public class ModuloAdmin {
         int idTecnico = Utilidades.inputNumerico();
 
         ArrayList<Ticket> ticketsFiltrados = new ArrayList<>();
+        boolean tecnicoEncontrado = false;
 
         for (Ticket ticket : tickets) {
             if (ticket.getIdTecnico() == idTecnico) {
                 ticketsFiltrados.add(ticket);
+                tecnicoEncontrado = true;
             }
+        }
+
+        if (!tecnicoEncontrado) {
+            System.out.println("El técnico seleccionado no existe: no se ha podido filtrar.\n");
+            return;
         }
 
         if (ticketsFiltrados.isEmpty()) {
@@ -318,15 +325,22 @@ public class ModuloAdmin {
         int idDispositivo = Utilidades.inputNumerico();
 
         ArrayList<Ticket> ticketsFiltrados = new ArrayList<>();
+        boolean inventarioEncontrado = false;
 
         for (Ticket ticket : tickets) {
             if (ticket.getIdDispositivos() == idDispositivo) {
                 ticketsFiltrados.add(ticket);
+                inventarioEncontrado = true;
             }
         }
 
+        if (!inventarioEncontrado) {
+            System.out.println("El técnico seleccionado no existe: no se ha podido filtrar.\n");
+            return;
+        }
+
         if (ticketsFiltrados.isEmpty()) {
-            System.out.println("No hay tickets asociados al dispositivo con ID: " + idDispositivo);
+            System.out.println("No hay tickets asociados al dispositivo con ID: " + idDispositivo + "\n");
         } else {
             Utilidades.imprimirTickets(ticketsFiltrados, tecnicos, dispositivos);
         }

@@ -192,7 +192,6 @@ public class ModuloUsuario {
 
     public static void Filtrar() {
         int option = 1;
-
         while (option != 0) {
             System.out.println("0: Atrás\t1: Filtrar categoría \t2: Filtrar sin resolver\t3: Filtrar resueltas");
             System.out.println("¿Qué acción desea realizar? ");
@@ -200,20 +199,44 @@ public class ModuloUsuario {
             ArrayList<Peticion> peticionesFiltradas;
 
             if (option == 1) {
-                Categoria categoria = elegirCategoria();
-                peticionesFiltradas = Utilidades.filtrarPeticionesPorCategoria(categoria.getId(), peticiones);
-                Utilidades.imprimirPeticiones(peticionesFiltradas, usuarios, categorias);
+                filtrarCategoria();
             } else if (option == 2) {
-                peticionesFiltradas = Utilidades.filtrarPeticionesPorEstado(false, peticiones);
-                Utilidades.imprimirPeticiones(peticionesFiltradas, usuarios, categorias);
+                filtrarSinResolver();
             } else if (option == 3) {
-                peticionesFiltradas = Utilidades.filtrarPeticionesPorEstado(true, peticiones);
-                Utilidades.imprimirPeticiones(peticionesFiltradas, usuarios, categorias);
+                filtrarResueltas();
             } else if (option == 0) {
                 return;
             } else {
                 System.out.println("La opción seleccionada no existe.");
             }
+        }
+    }
+
+    public static void filtrarCategoria() {
+        Categoria categoria = elegirCategoria();
+        if (categoria == null) {
+            System.out.println("Categoría inválida.\n");
+            return;
+        }
+        ArrayList<Peticion> peticionesFiltradas = Utilidades.filtrarPeticionesPorCategoria(categoria.getId(), peticiones);
+        Utilidades.imprimirPeticiones(peticionesFiltradas, usuarios, categorias);
+        if (peticionesFiltradas.isEmpty()) {
+            System.out.println("No hay peticiones que pertenezcan a esta categoría.\n");
+        }
+    }
+    public static void filtrarSinResolver() {
+        ArrayList<Peticion> peticionesFiltradas = Utilidades.filtrarPeticionesPorEstado(false, peticiones);
+        Utilidades.imprimirPeticiones(peticionesFiltradas, usuarios, categorias);
+        if (peticionesFiltradas.isEmpty()) {
+            System.out.println("Todas las peticiones han sido resueltas.\n");
+        }
+    }
+
+    public static void filtrarResueltas() {
+        ArrayList<Peticion> peticionesFiltradas = Utilidades.filtrarPeticionesPorEstado(true, peticiones);
+        Utilidades.imprimirPeticiones(peticionesFiltradas, usuarios, categorias);
+        if (peticionesFiltradas.isEmpty()) {
+            System.out.println("No hay peticiones resueltas.\n");
         }
     }
 }

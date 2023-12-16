@@ -88,6 +88,16 @@ public class ModuloTecnico {
     }
 
     public static void consultarTickets() {
+        //Imprime los tickets asignados al técnico que ha iniciado sesión.
+        //Mini menú que da la opción de modificar el dispositivo o el estado de un ticket
+        //seleccionado en la lista.
+    }
 
+    public static void modificarDispositivo() {
+        //Permite al técnico cambiar el dispositivo asociado a un ticket.
+    }
+
+    public static void modificarEstado() {
+        //Permite al técnico cambiar el estado de un ticket de false (pendiente) a true (resuelto).
     }
 }
