@@ -113,7 +113,7 @@ public class Utilidades {
 
     public static String estado(boolean resuelta) {
         if (resuelta)
-            return "Resuelta";
+            return "Resuelto";
         return "Pendiente";
     }
 
@@ -145,7 +145,7 @@ public class Utilidades {
 
     public static void imprimirDispositivos(ArrayList<DispositivoInventario> d) {
         for (DispositivoInventario dispositivo : d) {
-            System.out.println(dispositivo.getId() + " " + dispositivo.getNombre() + " ubicado en " + dispositivo.getSala() + "con IP " + dispositivo.getIp());
+            System.out.println(dispositivo.getId() + " " + dispositivo.getNombre() + " ubicado en " + dispositivo.getSala() + " con IP " + dispositivo.getIp());
         }
     }
 
@@ -180,6 +180,17 @@ public class Utilidades {
             }
         }
         return peticionesEstado;
+    }
+
+    public static ArrayList<Ticket> filtrarTicketsPorEstado(boolean resuelto, ArrayList<Ticket> tickets) {
+        ArrayList<Ticket> ticketsEstado = new ArrayList<>();
+
+        for (int i = 0; i < tickets.size(); i++) {
+            if (resuelto == tickets.get(i).getResuelto()) {
+                ticketsEstado.add(tickets.get(i));
+            }
+        }
+        return ticketsEstado;
     }
 
     public static ArrayList<Ticket> filtrarTicketsPorTecnico(int idTecnico, ArrayList<Ticket> tickets) {

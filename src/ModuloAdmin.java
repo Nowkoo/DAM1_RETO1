@@ -1,5 +1,3 @@
-import java.awt.image.AreaAveragingScaleFilter;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -19,7 +17,7 @@ public class ModuloAdmin {
     static int idIngresada;
     static Scanner scanner;
 
-    public static void main(String[] args) {
+    public static void ingresarComoAdmin() {
         scanner = new Scanner(System.in);
         cargarDatos();
 
@@ -37,7 +35,7 @@ public class ModuloAdmin {
             eleccionMenu = Utilidades.inputNumerico();
 
             if (eleccionMenu < 0 || eleccionMenu > 3) {
-                System.out.println("El número introducido no es válido, por favor introduce otro número");
+                System.out.println("El número introducido no es válido, por favor introduzca otro número.\n");
             }
             if (eleccionMenu == 0) {
                 GestorDatos.guardarDatosPeticiones(peticiones);
@@ -67,18 +65,18 @@ public class ModuloAdmin {
     }
 
     public static void mostrarMenu() {
-        System.out.println("0-Salir del programa");
-        System.out.println("1-Consultar peticiones");
-        System.out.println("2-Consultar tickets");
+        System.out.println("0-Salir del programa.");
+        System.out.println("1-Consultar peticiones.");
+        System.out.println("2-Consultar tickets.");
     }
 
     public static void loginAdmin() {
-        System.out.println("Ingresa tu ID de admin");
+        System.out.println("Ingresa tu ID de admin:");
         idIngresada = Utilidades.inputNumerico();
         usuarioEncontrado = Utilidades.buscarAdminPorId(idIngresada, admins);
 
         if(usuarioEncontrado == null) {
-            System.out.println("Usuario no encontrado");
+            System.out.println("Usuario no encontrado.\n");
             return;
         }
 
@@ -89,7 +87,7 @@ public class ModuloAdmin {
             System.out.println("\n¡Bienvenido, " + usuarioEncontrado.getNombre() + "! \uD83D\uDE00 \n");
             loginExitoso = true;
         } else
-            System.out.println("Contraseña incorrecta.");
+            System.out.println("Contraseña incorrecta.\n");
     }
 
     public static void mostrarUsuarios() {
@@ -115,49 +113,41 @@ public class ModuloAdmin {
             System.out.println("0: Atrás\t1: Generar ticket\t2: Cambiar petición de categoría");
             System.out.println("¿Qué acción desea realizar? ");
             option = Utilidades.inputNumerico();
-            scanner.nextLine();
 
             if (option == 1) {
                 System.out.println("Introduzca el ID de la petición a partir de la que quiere generar el ticket: ");
-                int idPeticion = Utilidades.inputNumerico();
-                Peticion peticion = Utilidades.buscarPeticionPorId(idPeticion, peticionesDelAdmin);
+                Peticion peticion = Utilidades.buscarPeticionPorId(Utilidades.inputNumerico(), peticionesDelAdmin);
                 if (peticion == null)
-                    System.out.println("El ID de petición indicado no es válido: no se ha podido generar el nuevo ticket.");
-                else
-                    generarTicket(idPeticion);
+                    System.out.println("El ID de petición indicado no es válido: no se ha podido generar el nuevo ticket.\n");
+                else if (peticion.getResuelta()) {
+                    System.out.println("No se puede generar tickets a partir de una petición que ya ha sido resuelta.");
+                } else
+                    generarTicket(peticion.getId());
 
             } else if (option == 2) {
                 System.out.println("Introduzca el ID de la petición que quiere cambiar de categoría: ");
-                int idPeticion = scanner.nextInt();
-                scanner.nextLine();
-
-                Utilidades.imprimirCategorias(categorias);
-                System.out.println("Introduzca el número de la categoría a la que quiere que pertenezca la petición: ");
-                int idNuevaCategoria = scanner.nextInt();
-                System.out.println(idPeticion);
-                System.out.println(idNuevaCategoria);
-                boolean modificada = modificarCategoria(idPeticion, idNuevaCategoria);
-                if(!modificada)
-                    System.out.println("No tiene ninguna solicitud abierta con el ID de petición proporcionado: no se ha podido cambiar la categoría.");
+                Peticion peticion = Utilidades.buscarPeticionPorId(Utilidades.inputNumerico(), peticionesDelAdmin);
+                if (peticion == null) {
+                    System.out.println("La petición seleccionada no existe.");
+                } else if (peticion.getResuelta()) {
+                    System.out.println("No se puede modificar una petición que ya ha sido resuelta.");
+                } else {
+                    Categoria categoria = ModuloUsuario.elegirCategoria();
+                    if (categoria == null) {
+                        System.out.println("La categoría seleccionada no existe.\n");
+                    } else {
+                        peticion.setIdCategoria(categoria.getId());
+                        System.out.println("La petición " + peticion.getId() + " ha sido movida a " + categoria.getCategoria() + ".\n");
+                    }
+                }
 
             } else if (option == 0) {
                 return;
 
             } else {
-                System.out.println("La opción seleccionada no existe.");
+                System.out.println("La opción seleccionada no existe.\n");
             }
         }
-    }
-
-    public static boolean modificarCategoria(int idPeticion, int idNuevaCategoria) {
-        boolean categoriaCambiada = false;
-        for (int i = 0; i < peticiones.size(); i++) {
-            if (peticiones.get(i).getId() == idPeticion) {
-                peticiones.get(i).setIdCategoria(idNuevaCategoria);
-                categoriaCambiada = true;
-            }
-        }
-        return categoriaCambiada;
     }
 
     public static void consultarTickets() {
@@ -182,7 +172,7 @@ public class ModuloAdmin {
             } else if (option == 0) {
                 return;
             } else {
-                System.out.println("La opción seleccionada no existe.");
+                System.out.println("La opción seleccionada no existe.\n");
             }
         }
     }
@@ -192,19 +182,19 @@ public class ModuloAdmin {
 
         Tecnico tecnico = elegirTecnico();
         if (tecnico == null) {
-            System.out.println("El técnico seleccionado no existe: no se ha podido generar el nuevo ticket.");
+            System.out.println("El técnico seleccionado no existe: no se ha podido generar el nuevo ticket.\n");
             return;
         }
 
         DispositivoInventario dispositivo = elegirDispositivo();
         if (dispositivo == null) {
-            System.out.println("El dispositivo seleccionado no existe: no se ha podido generar el nuevo ticket.");
+            System.out.println("El dispositivo seleccionado no existe: no se ha podido generar el nuevo ticket.\n");
             return;
         }
 
         int urgencia = elegirUrgencia();
         if (urgencia < 1) {
-            System.out.println("Valor inválido: no se ha podido generar el nuevo ticket.");
+            System.out.println("Valor inválido: no se ha podido generar el nuevo ticket.\n");
             return;
         }
 
@@ -213,7 +203,7 @@ public class ModuloAdmin {
 
         Ticket nuevoTicket = new Ticket(id, idPeticion, idIngresada, tecnico.getId(), dispositivo.getId(), urgencia, false, descripcion);
         tickets.add(nuevoTicket);
-        System.out.println("El ticket ha sido generado con éxito.");
+        System.out.println("El ticket ha sido generado con éxito.\n");
     }
 
     public static int generarIdTicket() {
@@ -249,8 +239,10 @@ public class ModuloAdmin {
         int idTicket = Utilidades.inputNumerico();
         Ticket ticket = Utilidades.buscarTicketPorId(idTicket, tickets);
         if (ticket == null) {
-            System.out.println("El ID introducido no es válido.");
+            System.out.println("El ID introducido no es válido.\n");
             return;
+        } else if (ticket.getResuelto()) {
+            System.out.println("No se puede modificar un ticket que ya ha sido resuelto.");
         }
 
         int option = 1;
@@ -266,7 +258,7 @@ public class ModuloAdmin {
             } else if (option == 0){
                 return;
             } else {
-                System.out.println("La opción seleccionada no existe.");
+                System.out.println("La opción seleccionada no existe.\n");
             }
         }
     }
@@ -274,18 +266,18 @@ public class ModuloAdmin {
     public static void cambiarTecnico(Ticket ticket) {
         Tecnico tecnico = elegirTecnico();
         if (tecnico == null) {
-            System.out.println("El técnico seleccionado no existe: no se ha podido modificar el técnico del ticket.");
+            System.out.println("El técnico seleccionado no existe: no se ha podido modificar el técnico del ticket.\n");
             return;
         }
         ticket.setIdTecnico(tecnico.getId());
-        System.out.println("El técnico del ticket " + ticket.getId() + " es ahora " + tecnico.getNombre() + ".");
+        System.out.println("El técnico del ticket " + ticket.getId() + " es ahora " + tecnico.getNombre() + ".\n");
     }
 
     public static void cambiarTarea(Ticket ticket){
         System.out.println("Introduzca la descripción de la nueva tarea: ");
         String nuevaTarea = scanner.nextLine();
         ticket.setDescripcion(nuevaTarea);
-        System.out.println("La descripción ha sido cambiada con éxito");
+        System.out.println("La descripción ha sido modificada con éxito.\n");
     }
 
     public static void filtrarTicketPorTecnico() {
@@ -306,12 +298,12 @@ public class ModuloAdmin {
         }
 
         if (!tecnicoEncontrado) {
-            System.out.println("El técnico seleccionado no existe: no se ha podido filtrar.\n");
+            System.out.println("No hay tickets asignados al técnico seleccionado.\n");
             return;
         }
 
         if (ticketsFiltrados.isEmpty()) {
-            System.out.println("No hay tickets asignados al técnico con ID: " + idTecnico);
+            System.out.println("No hay tickets asignados al técnico con ID: " + idTecnico + "\n");
         } else {
             Utilidades.imprimirTickets(ticketsFiltrados, tecnicos, dispositivos);
         }

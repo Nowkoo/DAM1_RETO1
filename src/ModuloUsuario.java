@@ -1,9 +1,5 @@
-import jdk.jshell.execution.Util;
 
-import java.io.*;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class ModuloUsuario {
@@ -17,7 +13,7 @@ public class ModuloUsuario {
     static ArrayList<Peticion> peticiones = new ArrayList<>();
     static ArrayList<Peticion> peticionesUsuario = new ArrayList<>();
 
-    public static void main(String[] args) {
+    public static void ingresarComoUsuario() {
         usuarios = GestorDatos.cargarDatosUsuario(usuarios);
         peticiones = GestorDatos.cargarDatosPeticiones(peticiones);
         categorias = GestorDatos.cargarDatosCategorias(categorias);
@@ -35,7 +31,8 @@ public class ModuloUsuario {
             eleccionMenu = Utilidades.inputNumerico();
 
             if (eleccionMenu < 0 || eleccionMenu > 4) {
-                System.out.println("El número introducido no es válido, por favor introduce otro número");
+                System.out.println("El número introducido no es válido, por favor introduzca otro número.\n");
+                System.out.println("El número introducido no es válido, por favor introduzca otro número.\n");
             }
             if (eleccionMenu == 0) {
                 GestorDatos.guardarDatosPeticiones(peticiones);
@@ -70,20 +67,20 @@ public class ModuloUsuario {
     }
 
     public static void mostrarMenu() {
-        System.out.println("0-Salir del programa");
-        System.out.println("1-Generar una petición");
-        System.out.println("2-Consultar peticiones");
-        System.out.println("3-Buscar una petición por su ID");
-        System.out.println("4-Modificar una petición");
+        System.out.println("0-Salir del programa.");
+        System.out.println("1-Generar una petición.");
+        System.out.println("2-Consultar peticiones.");
+        System.out.println("3-Buscar una petición por su ID.");
+        System.out.println("4-Modificar una petición.");
     }
 
     public static void loginUsuario() {
-        System.out.println("Ingresa tu ID de usuario");
+        System.out.println("Ingresa tu ID de usuario:");
         idIngresada = Utilidades.inputNumerico();
         usuarioEncontrado = Utilidades.buscarUsuarioPorId(idIngresada, usuarios);
 
         if(usuarioEncontrado == null) {
-            System.out.println("Usuario no encontrado");
+            System.out.println("Usuario no encontrado.\n");
             return;
         }
 
@@ -94,7 +91,7 @@ public class ModuloUsuario {
             System.out.println("\n¡Bienvenido, " + usuarioEncontrado.getNombre() + "! \uD83D\uDE00 \n");
             loginExitoso = true;
         } else
-            System.out.println("Contraseña incorrecta.");
+            System.out.println("Contraseña incorrecta.\n");
     }
 
     public static void generarPeticion() {
@@ -106,7 +103,7 @@ public class ModuloUsuario {
 
         Categoria categoria = elegirCategoria();
         if (categoria == null) {
-            System.out.println("La categoría seleccionada no existe: no se ha podido generar la petición.");
+            System.out.println("La categoría seleccionada no existe: no se ha podido generar la petición.\n");
             return;
         }
 
@@ -123,7 +120,7 @@ public class ModuloUsuario {
         // Agrega la nueva petición al ArrayList de peticiones
         peticiones.add(nuevaPeticion);
 
-        System.out.println("La petición ha sido generada con éxito.");
+        System.out.println("La petición ha sido generada con éxito.\n");
     }
 
     public static Categoria elegirCategoria() {
@@ -157,7 +154,7 @@ public class ModuloUsuario {
             Utilidades.imprimirSeparador();
 
         } else {
-            System.out.println("El ID introducido para mostrar la petición es erróneo.");
+            System.out.println("No existen peticiones a su nombre con el ID proporcionado.\n");
         }
     }
 
@@ -166,17 +163,19 @@ public class ModuloUsuario {
         Utilidades.imprimirPeticiones(peticionesUsuario, usuarios, categorias);
 
         System.out.println("Introduzca el ID de la petición que quiere modificar: ");
-        int idPeticion = Utilidades.inputNumerico();
+        Peticion peticion = Utilidades.buscarPeticionPorId(Utilidades.inputNumerico(), peticionesUsuario);
+        if (peticion == null) {
+            System.out.println("No existen peticiones a su nombre con el ID proporcionado.\n");
+            return;
+        } else if (peticion.getResuelta()) {
+            System.out.println("No se puede modificar una petición que ya ha sido resuelta.\n");
+            return;
+        }
 
         System.out.println("Introduzca la nueva descripción (se borrará la descripción anterior): ");
         String nuevaDescripcion = scanner.nextLine();
 
-        boolean descripcionCambiada = modificarDescripcion(idPeticion, nuevaDescripcion);
-
-        if (!descripcionCambiada) {
-            System.out.println("No tiene ninguna solicitud abierta con el ID de petición proporcionado: no se ha podido cambiar la descripción.");
-        }
-        System.out.println();
+        modificarDescripcion(peticion.getId(), nuevaDescripcion);
     }
 
     public static boolean modificarDescripcion(int idPeticion, String nuevaDescripcion) {
@@ -207,7 +206,7 @@ public class ModuloUsuario {
             } else if (option == 0) {
                 return;
             } else {
-                System.out.println("La opción seleccionada no existe.");
+                System.out.println("La opción seleccionada no existe.\n");
             }
         }
     }

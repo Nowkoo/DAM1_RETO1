@@ -1,3 +1,5 @@
 idTicket, idPeticion, idAdministrador,idTecnico,idDispositivo,urgencia,resuelto,descripcionTarea
-1,1,1,9,1,1,false,reparar o reemplazar
-2,1,1,6,1,1,false,modificar YA!!!!!!!
+1,1,1,1,1,1,true,reparar o reemplazar
+2,1,1,1,1,1,false,modificar YA!!!!!!!
+2,1,1,2,1,1,false,Reinstalar sistema operativo
+3,1,1,2,12,5,false,Preguntar al usuario porque no ha puesto ninguna descripción
