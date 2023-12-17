@@ -10,6 +10,7 @@ public class Utilidades {
         try {
             input = scanner.nextInt();
             scanner.nextLine();
+            System.out.println();
         } catch (InputMismatchException e) {
             input = -10;
         }
@@ -21,7 +22,7 @@ public class Utilidades {
     }
 
     public static void imprimirSeparador() {
-        System.out.println("------------------------------------------------------------------------------");
+        System.out.println("------------------------------------------------------------------------------------");
     }
 
     public static String pedirPassword() {
@@ -202,5 +203,16 @@ public class Utilidades {
             }
         }
         return ticketsPorTecnico;
+    }
+
+    public static ArrayList<Ticket> filtrarTicketsPorDispositivo(int idDispositivo, ArrayList<Ticket> tickets) {
+        ArrayList<Ticket> ticketsPorDispositivo = new ArrayList<>();
+
+        for (int i = 0; i < tickets.size(); i++) {
+            if (idDispositivo == tickets.get(i).getIdDispositivos()) {
+                ticketsPorDispositivo.add(tickets.get(i));
+            }
+        }
+        return ticketsPorDispositivo;
     }
 }

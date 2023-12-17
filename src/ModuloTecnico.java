@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class ModuloTecnico {
     private static ArrayList<Ticket> tickets = new ArrayList<>();
@@ -11,10 +10,8 @@ public class ModuloTecnico {
     static Tecnico usuarioActual;
     static boolean loginExitoso = false;
     static int idIngresada;
-    static Scanner scanner;
 
     public static void ingresarComoTecnico() {
-        scanner = new Scanner(System.in);
         cargarDatos();
 
         int eleccionMenu;
@@ -76,7 +73,7 @@ public class ModuloTecnico {
         boolean esCorrecta = Utilidades.validarPassword(passwordIngresada, usuarioActual.getPassword());
 
         if (esCorrecta) {
-            System.out.println("\n¡Bienvenido, " + usuarioActual.getNombre() + "! \uD83D\uDE00 \n");
+            System.out.println("\n¡Bienvenido, " + usuarioActual.getNombre() + "! :) \n");
             loginExitoso = true;
         } else
             System.out.println("Contraseña incorrecta.\n");
@@ -188,18 +185,21 @@ public class ModuloTecnico {
 
     public static void filtrarTicketsSinResolver() {
         ArrayList<Ticket> ticketsFiltrados = Utilidades.filtrarTicketsPorEstado(false, tickets);
-        Utilidades.imprimirTickets(ticketsFiltrados, tecnicos, dispositivos);
         if (ticketsFiltrados.isEmpty()) {
             System.out.println("Todos los tickets han sido resueltos.\n");
+            return;
         }
+        System.out.println("Tickets sin resolver: ");
+        Utilidades.imprimirTickets(ticketsFiltrados, tecnicos, dispositivos);
     }
 
     public static void filtrarTicketsResueltos() {
         ArrayList<Ticket> ticketsFiltrados = Utilidades.filtrarTicketsPorEstado(true, tickets);
-        Utilidades.imprimirTickets(ticketsFiltrados, tecnicos, dispositivos);
         if (ticketsFiltrados.isEmpty()) {
             System.out.println("No hay tickets resueltos.\n");
         }
+        System.out.println("Tickets resueltos:");
+        Utilidades.imprimirTickets(ticketsFiltrados, tecnicos, dispositivos);
     }
 
     public static void actualizarEstadoPeticiones(Ticket ticket) {

@@ -88,16 +88,16 @@ public class ModuloUsuario {
         boolean esCorrecta = Utilidades.validarPassword(passwordIngresada, usuarioEncontrado.getPassword());
 
         if (esCorrecta) {
-            System.out.println("\n¡Bienvenido, " + usuarioEncontrado.getNombre() + "! \uD83D\uDE00 \n");
+            System.out.println("\n¡Bienvenido, " + usuarioEncontrado.getNombre() + "! :) \n");
             loginExitoso = true;
         } else
             System.out.println("Contraseña incorrecta.\n");
     }
 
     public static void generarPeticion() {
-        scanner.nextLine();
         System.out.println("Ingrese la descripción de la petición:");
         String descripcion = scanner.nextLine();
+        System.out.println();
 
         String fecha = Fecha.ObtenerFechaActual();
 
@@ -174,6 +174,8 @@ public class ModuloUsuario {
 
         System.out.println("Introduzca la nueva descripción (se borrará la descripción anterior): ");
         String nuevaDescripcion = scanner.nextLine();
+        System.out.println();
+        System.out.println("La descripción ha sido modificada.\n");
 
         modificarDescripcion(peticion.getId(), nuevaDescripcion);
     }
@@ -218,24 +220,30 @@ public class ModuloUsuario {
             return;
         }
         ArrayList<Peticion> peticionesFiltradas = Utilidades.filtrarPeticionesPorCategoria(categoria.getId(), peticiones);
-        Utilidades.imprimirPeticiones(peticionesFiltradas, usuarios, categorias);
         if (peticionesFiltradas.isEmpty()) {
             System.out.println("No hay peticiones que pertenezcan a esta categoría.\n");
+            return;
         }
+        System.out.println("Peticiones de la categoría " + categoria.getCategoria() + ":");
+        Utilidades.imprimirPeticiones(peticionesFiltradas, usuarios, categorias);
     }
     public static void filtrarSinResolver() {
         ArrayList<Peticion> peticionesFiltradas = Utilidades.filtrarPeticionesPorEstado(false, peticiones);
-        Utilidades.imprimirPeticiones(peticionesFiltradas, usuarios, categorias);
         if (peticionesFiltradas.isEmpty()) {
             System.out.println("Todas las peticiones han sido resueltas.\n");
+            return;
         }
+        System.out.println("Peticiones sin resolver:");
+        Utilidades.imprimirPeticiones(peticionesFiltradas, usuarios, categorias);
     }
 
     public static void filtrarResueltas() {
         ArrayList<Peticion> peticionesFiltradas = Utilidades.filtrarPeticionesPorEstado(true, peticiones);
-        Utilidades.imprimirPeticiones(peticionesFiltradas, usuarios, categorias);
         if (peticionesFiltradas.isEmpty()) {
             System.out.println("No hay peticiones resueltas.\n");
+            return;
         }
+        System.out.println("Peticiones resueltas:");
+        Utilidades.imprimirPeticiones(peticionesFiltradas, usuarios, categorias);
     }
 }

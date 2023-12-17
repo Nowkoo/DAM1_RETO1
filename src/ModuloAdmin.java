@@ -84,7 +84,7 @@ public class ModuloAdmin {
         boolean esCorrecta = Utilidades.validarPassword(passwordIngresada, usuarioEncontrado.getPassword());
 
         if (esCorrecta) {
-            System.out.println("\n¡Bienvenido, " + usuarioEncontrado.getNombre() + "! \uD83D\uDE00 \n");
+            System.out.println("\n¡Bienvenido, " + usuarioEncontrado.getNombre() + "! :) \n");
             loginExitoso = true;
         } else
             System.out.println("Contraseña incorrecta.\n");
@@ -200,6 +200,7 @@ public class ModuloAdmin {
 
         System.out.println("Ingrese la descripción de la tarea que tiene que realizar el técnico: ");
         String descripcion = scanner.nextLine();
+        System.out.println();
 
         Ticket nuevoTicket = new Ticket(id, idPeticion, idIngresada, tecnico.getId(), dispositivo.getId(), urgencia, false, descripcion);
         tickets.add(nuevoTicket);
@@ -276,6 +277,7 @@ public class ModuloAdmin {
     public static void cambiarTarea(Ticket ticket){
         System.out.println("Introduzca la descripción de la nueva tarea: ");
         String nuevaTarea = scanner.nextLine();
+        System.out.println();
         ticket.setDescripcion(nuevaTarea);
         System.out.println("La descripción ha sido modificada con éxito.\n");
     }
@@ -285,26 +287,19 @@ public class ModuloAdmin {
         Utilidades.imprimirTecnicos(tecnicos);
 
         System.out.println("Introduzca el número del técnico para filtrar los tickets: ");
-        int idTecnico = Utilidades.inputNumerico();
+        Tecnico tecnico = Utilidades.buscarTecnicoPorId(Utilidades.inputNumerico(), tecnicos);
 
-        ArrayList<Ticket> ticketsFiltrados = new ArrayList<>();
-        boolean tecnicoEncontrado = false;
-
-        for (Ticket ticket : tickets) {
-            if (ticket.getIdTecnico() == idTecnico) {
-                ticketsFiltrados.add(ticket);
-                tecnicoEncontrado = true;
-            }
-        }
-
-        if (!tecnicoEncontrado) {
-            System.out.println("No hay tickets asignados al técnico seleccionado.\n");
+        if (tecnico == null) {
+            System.out.println("El técnico seleccionado no existe.\n");
             return;
         }
 
+        ArrayList<Ticket> ticketsFiltrados = Utilidades.filtrarTicketsPorTecnico(tecnico.getId(), tickets);
+
         if (ticketsFiltrados.isEmpty()) {
-            System.out.println("No hay tickets asignados al técnico con ID: " + idTecnico + "\n");
+            System.out.println(tecnico.getNombre() + " no tiene tickets asignados\n");
         } else {
+            System.out.println("Tickets del técnico " + tecnico.getNombre() + ":");
             Utilidades.imprimirTickets(ticketsFiltrados, tecnicos, dispositivos);
         }
     }
@@ -314,26 +309,19 @@ public class ModuloAdmin {
         Utilidades.imprimirDispositivos(dispositivos);
 
         System.out.println("Introduzca el número del dispositivo para filtrar los tickets: ");
-        int idDispositivo = Utilidades.inputNumerico();
+        DispositivoInventario dispositivo = Utilidades.buscarDispositivoPorId(Utilidades.inputNumerico(), dispositivos);
 
-        ArrayList<Ticket> ticketsFiltrados = new ArrayList<>();
-        boolean inventarioEncontrado = false;
-
-        for (Ticket ticket : tickets) {
-            if (ticket.getIdDispositivos() == idDispositivo) {
-                ticketsFiltrados.add(ticket);
-                inventarioEncontrado = true;
-            }
-        }
-
-        if (!inventarioEncontrado) {
-            System.out.println("El técnico seleccionado no existe: no se ha podido filtrar.\n");
+        if (dispositivo == null) {
+            System.out.println("El dispositivo seleccionado no existe.\n");
             return;
         }
 
+        ArrayList<Ticket> ticketsFiltrados = Utilidades.filtrarTicketsPorDispositivo(dispositivo.getId(), tickets);
+
         if (ticketsFiltrados.isEmpty()) {
-            System.out.println("No hay tickets asociados al dispositivo con ID: " + idDispositivo + "\n");
+            System.out.println("No hay tickets asociados a " + dispositivo.getNombre() + ".\n");
         } else {
+            System.out.println("Tickets relacionados con " + dispositivo.getNombre() + ":");
             Utilidades.imprimirTickets(ticketsFiltrados, tecnicos, dispositivos);
         }
     }
