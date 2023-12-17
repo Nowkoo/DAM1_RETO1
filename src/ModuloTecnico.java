@@ -88,16 +88,70 @@ public class ModuloTecnico {
     }
 
     public static void consultarTickets() {
-        //Imprime los tickets asignados al técnico que ha iniciado sesión.
-        //Mini menú que da la opción de modificar el dispositivo o el estado de un ticket
-        //seleccionado en la lista.
+        if (ticketsDelTecnico.isEmpty()) {
+            System.out.println("No hay tickets asignados al técnico actual.");
+            return;
+        }
+
+        Utilidades.imprimirTickets(ticketsDelTecnico, tecnicos, dispositivos);
+
+        System.out.println("Ingrese el ID del ticket que desea modificar (0 para regresar): ");
+        int idTicket = Utilidades.inputNumerico();
+
+        if (idTicket == 0) {
+            return;
+        }
+
+        Ticket ticketSeleccionado = Utilidades.buscarTicketPorId(idTicket, ticketsDelTecnico);
+
+        if (ticketSeleccionado == null) {
+            System.out.println("ID de ticket no válido.");
+            return;
+        }
+
+        System.out.println("Seleccione una opción:");
+        System.out.println("1. Modificar dispositivo");
+        System.out.println("2. Modificar estado");
+
+        int opcion = Utilidades.inputNumerico();
+
+        switch (opcion) {
+            case 1:
+                modificarDispositivo(ticketSeleccionado);
+                break;
+            case 2:
+                modificarEstado(ticketSeleccionado);
+                break;
+            default:
+                System.out.println("Opción no válida.");
+        }
     }
 
-    public static void modificarDispositivo() {
-        //Permite al técnico cambiar el dispositivo asociado a un ticket.
+    public static void modificarDispositivo(Ticket ticket) {
+        System.out.println("Seleccione el nuevo dispositivo (ID): ");
+        Utilidades.imprimirDispositivos(dispositivos);
+
+        int idDispositivo = Utilidades.inputNumerico();
+        DispositivoInventario nuevoDispositivo = Utilidades.buscarDispositivoPorId(idDispositivo, dispositivos);
+
+        if (nuevoDispositivo == null) {
+            System.out.println("ID de dispositivo no válido.");
+            return;
+        }
+
+        ticket.setIdDispositivos(nuevoDispositivo.getId());
+        System.out.println("Dispositivo modificado con éxito.");
     }
 
-    public static void modificarEstado() {
-        //Permite al técnico cambiar el estado de un ticket de false (pendiente) a true (resuelto).
+    public static void modificarEstado(Ticket ticket) {
+        System.out.println("Seleccione el nuevo estado (1: Resuelto, 0: Pendiente): ");
+        int nuevoEstado = Utilidades.inputNumerico();
+
+        if (nuevoEstado == 0 || nuevoEstado == 1) {
+            ticket.setResuelto(nuevoEstado == 1);
+            System.out.println("Estado modificado con éxito.");
+        } else {
+            System.out.println("Opción no válida.");
+        }
     }
 }
