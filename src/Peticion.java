@@ -55,7 +55,7 @@ public class Peticion {
     }
 
     public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+        this.descripcion = descripcion.replaceAll(",", "");
     }
 
     public void setFecha(String fecha) {
