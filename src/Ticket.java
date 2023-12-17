@@ -82,6 +82,6 @@ public class Ticket {
     }
 
     public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+        this.descripcion = descripcion.replaceAll(",", "");
     }
 }
