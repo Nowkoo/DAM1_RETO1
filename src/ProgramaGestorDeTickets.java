@@ -2,7 +2,7 @@ public class ProgramaGestorDeTickets {
     public static void main(String[] args) {
         int eleccionMenu;
         do {
-            System.out.println("0: CERRAR PROGRAMA\n1: INGRESAR COMO USUARIO\n2: INGRESAR COMO TÉCNICO\n3: INGRESAR COMO ADMINISTRADOR");
+            System.out.println("0: SALIR DEL PROGRAMA\n1: INGRESAR COMO USUARIO\n2: INGRESAR COMO TÉCNICO\n3: INGRESAR COMO ADMINISTRADOR");
             eleccionMenu = Utilidades.inputNumerico();
 
             if (eleccionMenu < 0 || eleccionMenu > 3) {

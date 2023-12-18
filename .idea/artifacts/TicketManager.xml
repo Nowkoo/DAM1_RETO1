@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="TicketManager">
+    <output-path>$PROJECT_DIR$/out/artifacts/TicketManager</output-path>
+    <root id="archive" name="Reto1Fix.jar">
+      <element id="module-output" name="Reto1Fix" />
+    </root>
+  </artifact>
+</component>

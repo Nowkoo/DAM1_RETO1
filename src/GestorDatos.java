@@ -1,6 +1,10 @@
 import java.io.*;
 import java.util.ArrayList;
 
+//FUNCIONES QUE PERMITEN CARGAR EN ARRAYS LOS DATOS ALMACENADOS EN LOS CSV
+//O QUE PERMITEN GUARDAR Y ACTUALIZAR LOS DATOS DE LOS CSV ANTES DE CERRAR EL
+//PROGRAMA PARA QUE ESTOS NO SE PIERDAN.
+
 public class GestorDatos {
     public static ArrayList<Usuario> cargarDatosUsuario(ArrayList<Usuario> u) {
         try {

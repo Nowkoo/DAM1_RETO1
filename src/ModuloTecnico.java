@@ -28,7 +28,7 @@ public class ModuloTecnico {
             eleccionMenu = Utilidades.inputNumerico();
 
             if (eleccionMenu < 0 || eleccionMenu > 3) {
-                System.out.println("El número introducido no es válido, por favor introduzca otro número.\n");
+                System.out.println("La opción seleccionada no existe, pruebe otra vez:\n");
             }
             if (eleccionMenu == 0) {
                 GestorDatos.guardarDatosPeticiones(peticiones);
@@ -46,6 +46,7 @@ public class ModuloTecnico {
         } while (eleccionMenu != 0);
     }
 
+    //Carga los datos de los archivos csv que utiliza este módulo en arrays.
     public static void cargarDatos() {
         peticiones = GestorDatos.cargarDatosPeticiones(peticiones);
         tickets = GestorDatos.cargarDatosTickets(tickets);
@@ -53,12 +54,14 @@ public class ModuloTecnico {
         dispositivos = GestorDatos.cargarDatosDispositivos(dispositivos);
     }
 
+    //Texto del menú.
     public static void mostrarMenu() {
-        System.out.println("0-Salir del programa.");
-        System.out.println("1-Consultar mis tickets.");
-        System.out.println("2-Consultar todos los tickets.");
+        System.out.println("0-Cerrar sesión.");
+        System.out.println("1-Gestionar mis tickets.");
+        System.out.println("2-Ver todos los tickets.");
     }
 
+    //Permite iniciar sesión al técnico.
     public static void loginTecnico() {
         System.out.println("Ingresa tu ID de técnico:\n");
         idIngresada = Utilidades.inputNumerico();
@@ -73,17 +76,20 @@ public class ModuloTecnico {
         boolean esCorrecta = Utilidades.validarPassword(passwordIngresada, usuarioActual.getPassword());
 
         if (esCorrecta) {
-            System.out.println("\n¡Bienvenido, " + usuarioActual.getNombre() + "! :) \n");
+            System.out.println("\n¡Bienvenido/a, " + usuarioActual.getNombre() + "! :) \n");
             loginExitoso = true;
         } else
             System.out.println("Contraseña incorrecta.\n");
     }
 
+    //Muestra las credenciales de un técnico para facilitar pruebas en el programa.
     public static void mostrarUsuarios() {
         System.out.println("//Iniciar sesión con ID: " + tecnicos.get(0).getId() + ", CONTRASEÑA: " + tecnicos.get(0).getPassword());
         System.out.println();
     }
 
+    //Imprime los tickets asignados al técnico que ha iniciado sesión y gestiona el menú
+    //en el que se decide que hacer con ellos: modificar o filtrar por estado.
     public static void consultarTickets() {
         if (ticketsDelTecnico.isEmpty()) {
             System.out.println("No hay tickets asignados al técnico actual.\n");
@@ -107,12 +113,15 @@ public class ModuloTecnico {
                     break;
                 case 3:
                     filtrarTicketsSinResolver();
+                    break;
                 default:
                     System.out.println("Opción no válida.\n");
             }
         }
     }
 
+    //Pregunta al técnico qué ticket quiere modificar, comprueba que no sea nulo y gestiona
+    //varias opciones: modificar el dispositivo asignado al ticket o cambiar el estado del ticket.
     public static void modificarTickets() {
         System.out.println("Ingrese el ID del ticket que desea modificar (0 para regresar): ");
         int idTicket = Utilidades.inputNumerico();
@@ -152,6 +161,8 @@ public class ModuloTecnico {
         }
     }
 
+    //Da a elegir al técnico cuál quiere que sea el nuevo dispositivo asignado al ticket,
+    //comprueba que no sea nulo y lo asigna.
     public static void modificarDispositivo(Ticket ticket) {
         System.out.println("Seleccione el nuevo dispositivo (ID): ");
         Utilidades.imprimirDispositivos(dispositivos);
@@ -168,6 +179,7 @@ public class ModuloTecnico {
         System.out.println("Dispositivo modificado con éxito.\n");
     }
 
+    //El usuario puede decidir si marcar o no un ticket como resuelto.
     public static void modificarEstado(Ticket ticket) {
         System.out.println("0: Atrás\t 1: Marcar ticket como resuelto");
         int nuevoEstado = Utilidades.inputNumerico();
@@ -183,8 +195,9 @@ public class ModuloTecnico {
         }
     }
 
+    //Imprime todos los tickets sin resolver
     public static void filtrarTicketsSinResolver() {
-        ArrayList<Ticket> ticketsFiltrados = Utilidades.filtrarTicketsPorEstado(false, tickets);
+        ArrayList<Ticket> ticketsFiltrados = Utilidades.filtrarTicketsPorEstado(false, ticketsDelTecnico);
         if (ticketsFiltrados.isEmpty()) {
             System.out.println("Todos los tickets han sido resueltos.\n");
             return;
@@ -193,8 +206,9 @@ public class ModuloTecnico {
         Utilidades.imprimirTickets(ticketsFiltrados, tecnicos, dispositivos);
     }
 
+    //Imprime todos los tickets resueltos.
     public static void filtrarTicketsResueltos() {
-        ArrayList<Ticket> ticketsFiltrados = Utilidades.filtrarTicketsPorEstado(true, tickets);
+        ArrayList<Ticket> ticketsFiltrados = Utilidades.filtrarTicketsPorEstado(true, ticketsDelTecnico);
         if (ticketsFiltrados.isEmpty()) {
             System.out.println("No hay tickets resueltos.\n");
         }
@@ -202,6 +216,9 @@ public class ModuloTecnico {
         Utilidades.imprimirTickets(ticketsFiltrados, tecnicos, dispositivos);
     }
 
+    //Cuando un ticket se resuelve, comprueba el estado del resto de tickets asociados
+    //a la misma petición que el ticket que ha sido resuelto. Si todos los tickets asociados
+    //a la petición han sido resueltos, marca la petición como resuelta también.
     public static void actualizarEstadoPeticiones(Ticket ticket) {
         boolean hayTicketsPendientes = false;
         for (Ticket t : tickets) {
